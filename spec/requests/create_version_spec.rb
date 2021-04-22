@@ -9,7 +9,9 @@ RSpec.describe 'POST /services/:id/versions' do
   let(:version) do
     JSON.parse(
       File.read(fixtures_directory.join('version.json'))
-    ).merge(service_id: service.id).deep_symbolize_keys
+    ).merge(service_id: service.id)
+     .deep_symbolize_keys
+     .except(:created_at, :version_id) # the Metadata API will create these
   end
 
   context 'when valid attributes' do
