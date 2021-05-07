@@ -18,7 +18,7 @@ jobs:
           command: docker-compose run --rm metadata-app bundle exec rubocop
       - run:
           name: test
-          command: docker-compose run --rm metadata-app bundle exec rspec
+          command: make setup && docker-compose run --rm metadata-app bundle exec rspec
       - slack/status: &slack_status
           fail_only: true
           only_for_branches: main
