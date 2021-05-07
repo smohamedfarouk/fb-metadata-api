@@ -9,7 +9,8 @@ jobs:
       - image: cimg/ruby:2.7.3
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.13
       - run:
           name: security
           command: docker-compose run --rm metadata-app bundle exec brakeman -q --no-pager
@@ -18,7 +19,7 @@ jobs:
           command: docker-compose run --rm metadata-app bundle exec rubocop
       - run:
           name: test
-          command: make setup && docker-compose run --rm metadata-app bundle exec rspec
+          command: make spec
       - slack/status: &slack_status
           fail_only: true
           only_for_branches: main
