@@ -12,8 +12,14 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - run:
-          name: security
-          command: docker-compose run --rm metadata-app bundle exec brakeman -q --no-pager
+          name: Install Docker Compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.28.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+         name: security
+         command: docker-compose run --rm metadata-app bundle exec brakeman -q --no-pager
       - run:
           name: lint
           command: docker-compose run --rm metadata-app bundle exec rubocop
