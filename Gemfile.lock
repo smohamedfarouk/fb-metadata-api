@@ -236,14 +236,14 @@ GEM
       rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.4)
-    sentry-rails (4.5.2)
+    sentry-rails (4.6.0)
       railties (>= 5.0)
-      sentry-ruby-core (~> 4.5.0)
-    sentry-ruby (4.5.2)
+      sentry-ruby-core (~> 4.6.0)
+    sentry-ruby (4.6.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       faraday (>= 1.0)
-      sentry-ruby-core (= 4.5.2)
-    sentry-ruby-core (4.5.2)
+      sentry-ruby-core (= 4.6.0)
+    sentry-ruby-core (4.6.0)
       concurrent-ruby
       faraday
     spring (2.1.1)
@@ -287,8 +287,8 @@ DEPENDENCIES
   rspec-rails
   rubocop (~> 1.15.0)
   rubocop-govuk
-  sentry-rails (~> 4.5.2)
-  sentry-ruby (~> 4.5.2)
+  sentry-rails (~> 4.6.0)
+  sentry-ruby (~> 4.6.0)
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
