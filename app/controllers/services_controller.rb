@@ -1,4 +1,6 @@
 class ServicesController < ApplicationController
+  SERVICE_EXISTS = 'Name has already been taken'.freeze
+
   def create
     service = Service.new(service_params)
 
@@ -10,6 +12,10 @@ class ServicesController < ApplicationController
         status: :created
       )
     else
+      if service.errors.full_messages.include?(SERVICE_EXISTS)
+        Rails.logger.info("Service with #{service.name} already exists")
+      end
+
       render json:
         ErrorsSerializer.new(
           message: service.errors.full_messages
