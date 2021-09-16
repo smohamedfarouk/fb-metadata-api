@@ -14,7 +14,7 @@ task add_uuid_to_items: :environment do |_t, _args|
 
     data['pages'].each do |page|
       Array(page['components']).each do |component|
-        Array(component['items']) do |item|
+        Array(component['items']).each do |item|
           if item['_uuid'].blank?
             item['_uuid'] = SecureRandom.uuid
           end
