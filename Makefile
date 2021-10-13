@@ -20,7 +20,7 @@ all_units: build
 .PHONY: unit
 unit: build
   # change to what is required
-	$(DOCKER_COMPOSE) run --rm metadata-app bundle exec rspec spec/requests/create_service_spec.rb
+	$(DOCKER_COMPOSE) run --rm metadata-app bundle exec rspec spec/requests/get_services_spec.rb
 
 .PHONY: seed_public_key
 seed_public_key:
