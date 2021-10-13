@@ -122,6 +122,18 @@ GEM
     json-schema (2.8.1)
       addressable (>= 2.4)
     jwt (2.2.3)
+    kaminari (1.2.1)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.1)
+      kaminari-activerecord (= 1.2.1)
+      kaminari-core (= 1.2.1)
+    kaminari-actionview (1.2.1)
+      actionview
+      kaminari-core (= 1.2.1)
+    kaminari-activerecord (1.2.1)
+      activerecord
+      kaminari-core (= 1.2.1)
+    kaminari-core (1.2.1)
     kramdown (2.3.1)
       rexml
     listen (3.3.3)
@@ -287,6 +299,7 @@ DEPENDENCIES
   factory_bot_rails
   fb-jwt-auth (~> 0.7.0)
   httparty
+  kaminari
   metadata_presenter (~> 2.7.2)
   pg (>= 0.18, < 2.0)
   prometheus-client (~> 2.1.0)

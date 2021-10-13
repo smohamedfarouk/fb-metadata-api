@@ -1,6 +1,12 @@
 class ServicesController < ApplicationController
   SERVICE_EXISTS = 'Name has already been taken'.freeze
 
+  def index
+    services = Service.order(name: :asc).page(page).per(per_page)
+
+    render json: ServicesSerializer.new(services).attributes
+  end
+
   def create
     service = Service.new(service_params)
 
@@ -27,5 +33,15 @@ class ServicesController < ApplicationController
     services = Service.where(created_by: params[:user_id])
 
     render json: ServicesSerializer.new(services).attributes, status: :ok
+  end
+
+  private
+
+  def page
+    params[:page] || 1
+  end
+
+  def per_page
+    params[:per_page] || 20
   end
 end
