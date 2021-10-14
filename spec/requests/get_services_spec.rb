@@ -35,6 +35,10 @@ RSpec.describe 'GET /services' do
       expect(response.status).to eq(200)
     end
 
+    it 'returns the total services' do
+      expect(response_body['total_services']).to be(3)
+    end
+
     it 'returns all services' do
       expect(response_body['services']).to match_array(
         [
@@ -70,6 +74,10 @@ RSpec.describe 'GET /services' do
         expect(response.status).to eq(200)
       end
 
+      it 'returns the total services' do
+        expect(response_body['total_services']).to be(3)
+      end
+
       it 'returns the number of services in the per page param' do
         expect(response_body['services']).to match_array(
           [
@@ -87,6 +95,10 @@ RSpec.describe 'GET /services' do
 
       it 'returns success response' do
         expect(response.status).to eq(200)
+      end
+
+      it 'returns the total services' do
+        expect(response_body['total_services']).to be(3)
       end
 
       it 'returns the number of services in the per page param' do

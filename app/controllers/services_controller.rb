@@ -4,7 +4,7 @@ class ServicesController < ApplicationController
   def index
     services = Service.order(name: :asc).page(page).per(per_page)
 
-    render json: ServicesSerializer.new(services).attributes
+    render json: ServicesSerializer.new(services, total_services: true).attributes
   end
 
   def create
