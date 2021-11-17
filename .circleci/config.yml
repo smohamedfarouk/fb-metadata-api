@@ -65,6 +65,13 @@ jobs:
             PLATFORM_ENV: test
             K8S_NAMESPACE: formbuilder-saas-test
           command: './deploy-scripts/bin/deploy'
+      - run:
+          name: deploy to test environment in EKS
+          environment:
+            APPLICATION_NAME: fb-metadata-api
+            PLATFORM_ENV: test
+            K8S_NAMESPACE: formbuilder-saas-test
+          command: './deploy-scripts/bin/deploy-eks'
       - slack/status:
           only_for_branches: main
           success_message: ":rocket:  Successfully deployed to Test  :guitar:"
