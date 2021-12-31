@@ -7,7 +7,7 @@ jobs:
   test:
     working_directory: ~/circle
     docker:
-      - image: cimg/ruby:2.7.3
+      - image: cimg/ruby:2.7.5
     steps:
       - checkout
       - setup_remote_docker:
@@ -105,7 +105,7 @@ jobs:
           include_job_number_field: false
   editor_acceptance_tests:
     docker:
-      - image: cimg/ruby:2.7.3
+      - image: cimg/ruby:2.7.5
       - environment:
           POSTGRES_DB: editor_local
           POSTGRES_PASSWORD: password
