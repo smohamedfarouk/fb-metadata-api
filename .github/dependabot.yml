@@ -8,51 +8,9 @@ updates:
     timezone: Europe/London
   open-pull-requests-limit: 10
   reviewers:
-  - tomas-stefano
   - brenetic
   - mattempty
   - njseeto
-  ignore:
-  - dependency-name: metadata_presenter
-    versions:
-    - 0.10.0
-    - 0.12.0
-    - 0.13.4
-    - 0.13.7
-    - 0.15.0
-    - 0.15.1
-    - 0.15.2
-    - 0.16.1
-    - 0.18.0
-    - 0.18.1
-    - 0.19.0
-    - 0.19.1
-    - 0.20.0
-    - 0.24.0
-    - 0.26.0
-    - 0.27.1
-    - 0.27.2
-    - 0.27.3
-    - 0.28.3
-    - 0.28.4
-    - 0.28.5
-    - 0.28.6
-    - 0.28.7
-    - 0.28.9
-    - 0.6.0
-    - 0.6.1
-    - 0.8.0
-    - 0.8.1
-    - 0.8.2
-  - dependency-name: rspec-rails
-    versions:
-    - 4.1.1
-  - dependency-name: rails
-    versions:
-    - 6.1.2
-  - dependency-name: database_cleaner-active_record
-    versions:
-    - 1.99.0
 - package-ecosystem: docker
   directory: "/"
   schedule:
@@ -61,11 +19,7 @@ updates:
     timezone: Europe/London
   open-pull-requests-limit: 10
   reviewers:
-  - tomas-stefano
   - brenetic
   - mattempty
   - njseeto
-  ignore:
-  - dependency-name: ruby
-    versions:
-    - 3.0.1.pre.alpine3.12
+
