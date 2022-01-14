@@ -119,7 +119,7 @@ jobs:
       PGPASSWORD: password
       PGUSER: postgres
       RAILS_ENV: test
-    parallelism: 4
+    parallelism: 5
     steps:
       - browser-tools/install-browser-tools
       - run:
