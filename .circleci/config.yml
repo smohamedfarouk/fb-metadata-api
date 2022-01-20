@@ -106,13 +106,13 @@ jobs:
   editor_acceptance_tests:
     docker:
       - image: cimg/ruby:2.7.5
-      - environment:
+      - environment: &acceptance_tests_docker_environment
           POSTGRES_DB: editor_local
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
         image: 'circleci/postgres:12.4'
     resource_class: large
-    environment:
+    environment: &acceptance_tests_environment
       BUNDLE_JOBS: '3'
       BUNDLE_RETRY: '3'
       PGHOST: 127.0.0.1
@@ -145,16 +145,53 @@ jobs:
             bundle exec rails db:migrate
 
             TESTFILES=$(circleci tests glob "acceptance/**/*_spec.rb" | circleci tests split --split-by=timings --timings-type=filename)
+            TO_EXCLUDE=acceptance/features/no_branching_spec.rb
+            FILTERED_TESTFILES=$(printf '%s\n' "${TESTFILES//$TO_EXCLUDE/}")
             echo '***********'
-            echo $TESTFILES
+            echo $FILTERED_TESTFILES
             echo '***********'
 
             bundle exec rspec --format progress \
               --format RspecJunitFormatter \
               --out ~/acceptance/acceptance.xml \
-              $TESTFILES
+              $FILTERED_TESTFILES
       - store_test_results:
           path: ~/acceptance
+      - slack/status: *slack_status
+  editor_acceptance_tests_no_branching:
+    docker:
+      - image: cimg/ruby:2.7.5
+      - environment: *acceptance_tests_docker_environment
+        image: 'circleci/postgres:12.4'
+    resource_class: large
+    environment: *acceptance_tests_environment
+    steps:
+      - browser-tools/install-browser-tools
+      - run:
+          name: Check browser tools install
+          command: |
+            google-chrome --version
+            chromedriver --version
+      - run:
+          name: Run editor acceptance tests
+          command: |
+            EDITOR_APP=https://fb-editor-test-no-branching.apps.live-1.cloud-platform.service.justice.gov.uk
+            echo 'export ACCEPTANCE_TESTS_EDITOR_APP=$EDITOR_APP' >> $BASH_ENV
+            echo 'export ACCEPTANCE_TESTS_USER=$ACCEPTANCE_TESTS_USER' >> $BASH_ENV
+            echo 'export ACCEPTANCE_TESTS_PASSWORD=$ACCEPTANCE_TESTS_PASSWORD' >> $BASH_ENV
+            echo 'export CI_MODE=true' >> $BASH_ENV
+            source $BASH_ENV
+
+            git clone https://github.com/ministryofjustice/fb-editor
+            cd fb-editor
+
+            bundle install
+            bundle exec rails db:setup
+            bundle exec rails db:migrate
+
+            bundle exec rspec --format progress \
+              --format RspecJunitFormatter \
+              acceptance/features/no_branching_spec.rb
       - slack/status: *slack_status
 
 workflows:
@@ -172,15 +209,20 @@ workflows:
       - editor_acceptance_tests:
           requires:
             - build_and_deploy_to_test
+      - editor_acceptance_tests_no_branching:
+          requires:
+            - build_and_deploy_to_test
       - slack/approval-notification:
           message: ":portalorangeparrot:  Deployment to Live pending approval  :portalblueparrot:"
           include_job_number_field: false
           requires:
             - editor_acceptance_tests
+            - editor_acceptance_tests_no_branching
       - confirm_live_deploy:
           type: approval
           requires:
             - editor_acceptance_tests
+            - editor_acceptance_tests_no_branching
       - build_and_deploy_to_live:
           requires:
             - confirm_live_deploy
