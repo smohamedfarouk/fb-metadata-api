@@ -234,9 +234,9 @@ GEM
     rubocop-rspec (2.7.0)
       rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
-    sentry-rails (5.0.1)
+    sentry-rails (5.0.2)
       railties (>= 5.0)
-      sentry-ruby-core (~> 5.0.1)
+      sentry-ruby-core (~> 5.0.2)
     sentry-ruby (5.0.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       sentry-ruby-core (= 5.0.2)
@@ -285,7 +285,7 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop (~> 1.25.0)
   rubocop-govuk
-  sentry-rails (~> 5.0.1)
+  sentry-rails (~> 5.0.2)
   sentry-ruby (~> 5.0.2)
   spring
   spring-watcher-listen (~> 2.0.0)
