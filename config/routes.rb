@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get '/health', to: 'health#show'
+  get '/health', to: 'health#show' # used for liveness probe
+  get '/readiness', to: 'health#readiness'
 
   resources :services, only: [:index, :create] do
     get '/users/:user_id', to: 'services#services_for_user', on: :collection
