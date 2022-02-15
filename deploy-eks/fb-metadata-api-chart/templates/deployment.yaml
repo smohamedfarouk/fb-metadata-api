@@ -7,6 +7,11 @@ metadata:
   namespace: formbuilder-saas-{{ .Values.environmentName }}
 spec:
   replicas: {{ .Values.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
   selector:
     matchLabels:
       app: "fb-metadata-api-{{ .Values.environmentName }}"
