@@ -256,6 +256,97 @@ jobs:
               --format RspecJunitFormatter \
               acceptance/features/no_branching_spec.rb
       - slack/status: *slack_status
+  editor_acceptance_tests_eks:
+    docker:
+      - image: cimg/ruby:2.7.5
+      - environment: &acceptance_tests_docker_environment
+          POSTGRES_DB: editor_local
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+        image: 'circleci/postgres:12.4'
+    resource_class: large
+    environment: &acceptance_tests_environment
+      BUNDLE_JOBS: '3'
+      BUNDLE_RETRY: '3'
+      PGHOST: 127.0.0.1
+      PGPASSWORD: password
+      PGUSER: postgres
+      RAILS_ENV: test
+    parallelism: 5
+    steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          name: Check browser tools install
+          command: |
+            google-chrome --version
+            chromedriver --version
+      - run:
+          name: Run editor acceptance tests (eks)
+          command: |
+            EDITOR_APP=https://fb-editor-test.apps.live.cloud-platform.service.justice.gov.uk
+            echo 'export ACCEPTANCE_TESTS_EDITOR_APP=$EDITOR_APP' >> $BASH_ENV
+            echo 'export ACCEPTANCE_TESTS_USER=$ACCEPTANCE_TESTS_USER' >> $BASH_ENV
+            echo 'export ACCEPTANCE_TESTS_PASSWORD=$ACCEPTANCE_TESTS_PASSWORD' >> $BASH_ENV
+            echo 'export CI_MODE=true' >> $BASH_ENV
+            source $BASH_ENV
+
+            git clone https://github.com/ministryofjustice/fb-editor
+            cd fb-editor
+
+            bundle install
+            bundle exec rails db:setup
+            bundle exec rails db:migrate
+
+            TESTFILES=$(circleci tests glob "acceptance/**/*_spec.rb" | circleci tests split --split-by=timings --timings-type=filename)
+            TO_EXCLUDE=acceptance/features/no_branching_spec.rb
+            FILTERED_TESTFILES=$(printf '%s\n' "${TESTFILES//$TO_EXCLUDE/}")
+            echo '***********'
+            echo $FILTERED_TESTFILES
+            echo '***********'
+
+            bundle exec rspec --format progress \
+              --format RspecJunitFormatter \
+              --out ~/acceptance/acceptance.xml \
+              $FILTERED_TESTFILES
+      - store_test_results:
+          path: ~/acceptance
+      - slack/status: *slack_status
+  editor_acceptance_tests_no_branching_eks:
+    docker:
+      - image: cimg/ruby:2.7.5
+      - environment: *acceptance_tests_docker_environment
+        image: 'circleci/postgres:12.4'
+    resource_class: large
+    environment: *acceptance_tests_environment
+    steps:
+      - browser-tools/install-browser-tools
+      - run:
+          name: Check browser tools install
+          command: |
+            google-chrome --version
+            chromedriver --version
+      - run:
+          name: Run editor acceptance tests (eks)
+          command: |
+            EDITOR_APP=https://fb-editor-test-no-branching.apps.live.cloud-platform.service.justice.gov.uk
+            echo 'export ACCEPTANCE_TESTS_EDITOR_APP=$EDITOR_APP' >> $BASH_ENV
+            echo 'export ACCEPTANCE_TESTS_USER=$ACCEPTANCE_TESTS_USER' >> $BASH_ENV
+            echo 'export ACCEPTANCE_TESTS_PASSWORD=$ACCEPTANCE_TESTS_PASSWORD' >> $BASH_ENV
+            echo 'export CI_MODE=true' >> $BASH_ENV
+            source $BASH_ENV
+
+            git clone https://github.com/ministryofjustice/fb-editor
+            cd fb-editor
+
+            bundle install
+            bundle exec rails db:setup
+            bundle exec rails db:migrate
+
+            bundle exec rspec --format progress \
+              --format RspecJunitFormatter \
+              acceptance/features/no_branching_spec.rb
+      - slack/status: *slack_status
 
 workflows:
   version: 2
@@ -290,6 +381,12 @@ workflows:
       - editor_acceptance_tests_no_branching:
           requires:
             - deploy_to_test
+      - editor_acceptance_tests_eks:
+          requires:
+            - deploy_to_test_eks
+      - editor_acceptance_tests_no_branching_eks:
+          requires:
+            - deploy_to_test_eks
       - slack/approval-notification:
           message: ":portalorangeparrot:  Deployment to Live pending approval  :portalblueparrot:"
           include_job_number_field: false
