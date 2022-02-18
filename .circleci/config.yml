@@ -236,7 +236,7 @@ jobs:
             google-chrome --version
             chromedriver --version
       - run:
-          name: Run editor acceptance tests
+          name: Run no branching editor acceptance tests
           command: |
             EDITOR_APP=https://fb-editor-test-no-branching.apps.live-1.cloud-platform.service.justice.gov.uk
             echo 'export ACCEPTANCE_TESTS_EDITOR_APP=$EDITOR_APP' >> $BASH_ENV
@@ -393,14 +393,19 @@ workflows:
           requires:
             - editor_acceptance_tests
             - editor_acceptance_tests_no_branching
+            - editor_acceptance_tests_eks
+            - editor_acceptance_tests_no_branching_eks
       - confirm_live_deploy:
           type: approval
           requires:
             - editor_acceptance_tests
             - editor_acceptance_tests_no_branching
-      - deploy_to_live:
-          requires:
-            - confirm_live_deploy
+            - editor_acceptance_tests_eks
+            - editor_acceptance_tests_no_branching_eks
       - deploy_to_live_eks:
           requires:
             - confirm_live_deploy
+      - deploy_to_live:
+          requires:
+            - confirm_live_deploy
+            - deploy_to_live_eks
