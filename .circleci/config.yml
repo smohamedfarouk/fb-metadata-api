@@ -369,18 +369,9 @@ workflows:
             branches:
               only:
                 - main
-      - deploy_to_test:
-          requires:
-            - build_and_push_image
       - deploy_to_test_eks:
           requires:
             - build_and_push_image
-      - editor_acceptance_tests:
-          requires:
-            - deploy_to_test
-      - editor_acceptance_tests_no_branching:
-          requires:
-            - deploy_to_test
       - editor_acceptance_tests_eks:
           requires:
             - deploy_to_test_eks
@@ -391,15 +382,11 @@ workflows:
           message: ":portalorangeparrot:  Deployment to Live pending approval  :portalblueparrot:"
           include_job_number_field: false
           requires:
-            - editor_acceptance_tests
-            - editor_acceptance_tests_no_branching
             - editor_acceptance_tests_eks
             - editor_acceptance_tests_no_branching_eks
       - confirm_live_deploy:
           type: approval
           requires:
-            - editor_acceptance_tests
-            - editor_acceptance_tests_no_branching
             - editor_acceptance_tests_eks
             - editor_acceptance_tests_no_branching_eks
       - deploy_to_live_eks:
