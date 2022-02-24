@@ -40,8 +40,9 @@ jobs:
       - image: cimg/ruby:2.7.5
     steps:
       - checkout
-      - setup_remote_docker:
+      - setup_remote_docker: &remote_docker
           version: 20.10.11
+          docker_layer_caching: true
       - run:
           name: Install Docker Compose
           command: |
@@ -61,8 +62,7 @@ jobs:
           aws_secret_access_key: $AWS_BUILD_IMAGE_SECRET_ACCESS_KEY
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.11
+      - setup_remote_docker: *remote_docker
       - run: &base_environment_variables
           name: Setup base environment variable
           command: |
@@ -76,26 +76,18 @@ jobs:
           environment:
             ENVIRONMENT_NAME: test
           command: './deploy-scripts/bin/build'
-  deploy_to_test:
+  deploy_to_test_eks:
     working_directory: ~/circle/git/fb-metadata-api
     docker: *ecr_image
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.11
+      - setup_remote_docker: *remote_docker
       - add_ssh_keys: &ssh_keys
           fingerprints:
             - a9:9c:0f:a2:2f:77:41:80:b8:84:e0:c8:10:a4:eb:2e
       - run: *base_environment_variables
       - run: *deploy_scripts
       - run:
-          name: deploy to test
-          environment:
-            APPLICATION_NAME: fb-metadata-api
-            PLATFORM_ENV: test
-            K8S_NAMESPACE: formbuilder-saas-test
-          command: './deploy-scripts/bin/deploy'
-      - run:
           name: deploy to test environment in EKS
           environment:
             APPLICATION_NAME: fb-metadata-api
@@ -103,53 +95,12 @@ jobs:
             K8S_NAMESPACE: formbuilder-saas-test
           command: './deploy-scripts/bin/deploy-eks'
       - slack/status: *slack_status
-  deploy_to_test_eks:
-    working_directory: ~/circle/git/fb-metadata-api
-    docker: *ecr_image
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.11
-      - add_ssh_keys: *ssh_keys
-      - run: *base_environment_variables
-      - run: *deploy_scripts
-      - run:
-          name: deploy to test environment in EKS
-          environment:
-            APPLICATION_NAME: fb-metadata-api
-            PLATFORM_ENV: test
-            K8S_NAMESPACE: formbuilder-saas-test
-          command: './deploy-scripts/bin/deploy-eks'
-      - slack/status: *slack_status
-  deploy_to_live:
-    working_directory: ~/circle/git/fb-metadata-api
-    docker: *ecr_image
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.11
-      - add_ssh_keys: *ssh_keys
-      - run: *base_environment_variables
-      - run: *deploy_scripts
-      - run:
-          name: deploy to live
-          environment:
-            APPLICATION_NAME: fb-metadata-api
-            PLATFORM_ENV: live
-            K8S_NAMESPACE: formbuilder-saas-live
-          command: './deploy-scripts/bin/deploy'
-      - slack/status:
-          only_for_branches: main
-          success_message: ":rocket:  Successfully deployed to Live  :guitar:"
-          failure_message: ":alert:  Failed to deploy to Live  :try_not_to_cry:"
-          include_job_number_field: false
   deploy_to_live_eks:
     working_directory: ~/circle/git/fb-metadata-api
     docker: *ecr_image
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.11
+      - setup_remote_docker: *remote_docker
       - add_ssh_keys: *ssh_keys
       - run: *base_environment_variables
       - run: *deploy_scripts
@@ -165,97 +116,6 @@ jobs:
           success_message: ":rocket:  Successfully deployed to Live (eks)  :guitar:"
           failure_message: ":alert:  Failed to deploy to Live (eks)  :try_not_to_cry:"
           include_job_number_field: false
-  editor_acceptance_tests:
-    docker:
-      - image: cimg/ruby:2.7.5
-      - environment: &acceptance_tests_docker_environment
-          POSTGRES_DB: editor_local
-          POSTGRES_PASSWORD: password
-          POSTGRES_USER: postgres
-        image: 'circleci/postgres:12.4'
-    resource_class: large
-    environment: &acceptance_tests_environment
-      BUNDLE_JOBS: '3'
-      BUNDLE_RETRY: '3'
-      PGHOST: 127.0.0.1
-      PGPASSWORD: password
-      PGUSER: postgres
-      RAILS_ENV: test
-    parallelism: 5
-    steps:
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-      - run:
-          name: Check browser tools install
-          command: |
-            google-chrome --version
-            chromedriver --version
-      - run:
-          name: Run editor acceptance tests
-          command: |
-            EDITOR_APP=https://fb-editor-test.apps.live-1.cloud-platform.service.justice.gov.uk
-            echo 'export ACCEPTANCE_TESTS_EDITOR_APP=$EDITOR_APP' >> $BASH_ENV
-            echo 'export ACCEPTANCE_TESTS_USER=$ACCEPTANCE_TESTS_USER' >> $BASH_ENV
-            echo 'export ACCEPTANCE_TESTS_PASSWORD=$ACCEPTANCE_TESTS_PASSWORD' >> $BASH_ENV
-            echo 'export CI_MODE=true' >> $BASH_ENV
-            source $BASH_ENV
-
-            git clone https://github.com/ministryofjustice/fb-editor
-            cd fb-editor
-
-            bundle install
-            bundle exec rails db:setup
-            bundle exec rails db:migrate
-
-            TESTFILES=$(circleci tests glob "acceptance/**/*_spec.rb" | circleci tests split --split-by=timings --timings-type=filename)
-            TO_EXCLUDE=acceptance/features/no_branching_spec.rb
-            FILTERED_TESTFILES=$(printf '%s\n' "${TESTFILES//$TO_EXCLUDE/}")
-            echo '***********'
-            echo $FILTERED_TESTFILES
-            echo '***********'
-
-            bundle exec rspec --format progress \
-              --format RspecJunitFormatter \
-              --out ~/acceptance/acceptance.xml \
-              $FILTERED_TESTFILES
-      - store_test_results:
-          path: ~/acceptance
-      - slack/status: *slack_status
-  editor_acceptance_tests_no_branching:
-    docker:
-      - image: cimg/ruby:2.7.5
-      - environment: *acceptance_tests_docker_environment
-        image: 'circleci/postgres:12.4'
-    resource_class: large
-    environment: *acceptance_tests_environment
-    steps:
-      - browser-tools/install-browser-tools
-      - run:
-          name: Check browser tools install
-          command: |
-            google-chrome --version
-            chromedriver --version
-      - run:
-          name: Run no branching editor acceptance tests
-          command: |
-            EDITOR_APP=https://fb-editor-test-no-branching.apps.live-1.cloud-platform.service.justice.gov.uk
-            echo 'export ACCEPTANCE_TESTS_EDITOR_APP=$EDITOR_APP' >> $BASH_ENV
-            echo 'export ACCEPTANCE_TESTS_USER=$ACCEPTANCE_TESTS_USER' >> $BASH_ENV
-            echo 'export ACCEPTANCE_TESTS_PASSWORD=$ACCEPTANCE_TESTS_PASSWORD' >> $BASH_ENV
-            echo 'export CI_MODE=true' >> $BASH_ENV
-            source $BASH_ENV
-
-            git clone https://github.com/ministryofjustice/fb-editor
-            cd fb-editor
-
-            bundle install
-            bundle exec rails db:setup
-            bundle exec rails db:migrate
-
-            bundle exec rspec --format progress \
-              --format RspecJunitFormatter \
-              acceptance/features/no_branching_spec.rb
-      - slack/status: *slack_status
   editor_acceptance_tests_eks:
     docker:
       - image: cimg/ruby:2.7.5
@@ -392,7 +252,3 @@ workflows:
       - deploy_to_live_eks:
           requires:
             - confirm_live_deploy
-      - deploy_to_live:
-          requires:
-            - confirm_live_deploy
-            - deploy_to_live_eks
