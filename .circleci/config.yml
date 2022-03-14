@@ -119,13 +119,13 @@ jobs:
   editor_acceptance_tests_eks:
     docker:
       - image: cimg/ruby:2.7.5
-      - environment: &acceptance_tests_docker_environment
+      - environment:
           POSTGRES_DB: editor_local
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
-        image: 'circleci/postgres:12.4'
+        image: 'cimg/postgres:12.9'
     resource_class: large
-    environment: &acceptance_tests_environment
+    environment:
       BUNDLE_JOBS: '3'
       BUNDLE_RETRY: '3'
       PGHOST: 127.0.0.1
