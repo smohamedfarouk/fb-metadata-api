@@ -68,7 +68,7 @@ GEM
     brakeman (5.2.1)
     builder (3.2.4)
     byebug (11.1.3)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     crass (1.0.6)
     database_cleaner-active_record (2.0.1)
       activerecord (>= 5.a)
@@ -237,10 +237,10 @@ GEM
     sentry-rails (5.2.0)
       railties (>= 5.0)
       sentry-ruby-core (~> 5.2.0)
-    sentry-ruby (5.2.0)
+    sentry-ruby (5.2.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      sentry-ruby-core (= 5.2.0)
-    sentry-ruby-core (5.2.0)
+      sentry-ruby-core (= 5.2.1)
+    sentry-ruby-core (5.2.1)
       concurrent-ruby
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
@@ -286,7 +286,7 @@ DEPENDENCIES
   rubocop (~> 1.25.0)
   rubocop-govuk
   sentry-rails (~> 5.2.0)
-  sentry-ruby (~> 5.2.0)
+  sentry-ruby (~> 5.2.1)
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
