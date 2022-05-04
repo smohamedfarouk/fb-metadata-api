@@ -26,7 +26,7 @@ end
 
 group :development do
   gem 'brakeman'
-  gem 'rubocop', '~> 1.25.0'
+  gem 'rubocop', '~> 1.27.0'
   gem 'rubocop-govuk'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
