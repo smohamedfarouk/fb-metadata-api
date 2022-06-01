@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     resources :versions, only: [:index, :create, :show] do
       get :latest, on: :collection
     end
+
+    get '/items/all', as: :items, to: 'component_items#index'
   end
 
   match '*unmatched', to: 'application#not_found', via: :all

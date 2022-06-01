@@ -9,4 +9,11 @@ FactoryBot.define do
     created_by { 'Fay' }
     locale { 'en' }
   end
+
+  factory :items do
+    data { [] }
+    created_by { 'Fay' }
+    service_id { SecureRandom.uuid }
+    component_id { SecureRandom.uuid }
+  end
 end
