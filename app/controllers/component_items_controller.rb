@@ -5,10 +5,6 @@ class ComponentItemsController < ApplicationController
 
   private
 
-  def service
-    @service ||= Service.find(params[:service_id])
-  end
-
   def items
     @items ||= Items.where(service_id: service.id)
   end
