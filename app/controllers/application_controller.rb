@@ -33,6 +33,10 @@ class ApplicationController < ActionController::API
     ).attributes, status: :not_found
   end
 
+  def service
+    @service ||= Service.find(params[:service_id])
+  end
+
   private
 
   def service_params

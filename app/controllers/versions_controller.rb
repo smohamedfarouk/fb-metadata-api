@@ -35,10 +35,6 @@ class VersionsController < ApplicationController
     render json: MetadataSerialiser.new(service, metadata).attributes, status: :ok
   end
 
-  def service
-    @service ||= Service.find(params[:service_id])
-  end
-
   def locale
     @locale ||= params[:locale] || 'en'
   end
