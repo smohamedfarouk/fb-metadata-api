@@ -1,4 +1,6 @@
 class ComponentItemsController < ApplicationController
+  before_action :validate_items, only: :create
+
   def index
     render json: ComponentItemsSerialiser.new(service.items, service).attributes, status: :ok
   end
@@ -21,5 +23,14 @@ class ComponentItemsController < ApplicationController
 
   def items_params
     params.permit(:service_id, :component_id, :created_by, data: %i[text value])
+  end
+
+  def validate_items
+    MetadataPresenter::ValidateSchema.validate(params[:data], 'definition.select')
+  rescue JSON::Schema::ValidationError, JSON::Schema::SchemaError, SchemaNotFoundError => e
+    render(
+      json: ErrorsSerializer.new(message: e.message).attributes,
+      status: :unprocessable_entity
+    )
   end
 end

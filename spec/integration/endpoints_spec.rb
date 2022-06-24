@@ -105,26 +105,47 @@ RSpec.describe 'API integration tests' do
     end
 
     context 'when new items are created' do
-      it 'returns the newly created items for that service' do
-        response = metadata_api_test_client.create_service(
-          body: request_body,
-          authorisation_headers: authorisation_headers
-        )
-        metadata = parse_response(response)
+      context 'when schema is valid' do
+        it 'returns the newly created items for that service' do
+          response = metadata_api_test_client.create_service(
+            body: request_body,
+            authorisation_headers: authorisation_headers
+          )
+          metadata = parse_response(response)
 
-        updated_payload = items_one.merge(
-          created_by: metadata[:created_by],
-          service_id: metadata[:service_id]
-        )
+          updated_payload = items_one.merge(
+            created_by: metadata[:created_by],
+            service_id: metadata[:service_id]
+          )
 
-        response = metadata_api_test_client.create_items(
-          service_id: metadata[:service_id],
-          component_id: items_one[:component_id],
-          body: updated_payload.to_json,
-          authorisation_headers: authorisation_headers
-        )
+          response = metadata_api_test_client.create_items(
+            service_id: metadata[:service_id],
+            component_id: items_one[:component_id],
+            body: updated_payload.to_json,
+            authorisation_headers: authorisation_headers
+          )
 
-        expect(response.code).to be(201)
+          expect(response.code).to be(201)
+        end
+      end
+
+      context 'when schema is not valid' do
+        it 'returns a 422' do
+          response = metadata_api_test_client.create_service(
+            body: request_body,
+            authorisation_headers: authorisation_headers
+          )
+          metadata = parse_response(response)
+
+          response = metadata_api_test_client.create_items(
+            service_id: metadata[:service_id],
+            component_id: items_one[:component_id],
+            body: {},
+            authorisation_headers: authorisation_headers
+          )
+
+          expect(response.code).to be(422)
+        end
       end
     end
 
