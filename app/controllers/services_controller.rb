@@ -1,4 +1,4 @@
-class ServicesController < ApplicationController
+class ServicesController < MetadataController
   SERVICE_EXISTS = 'Name has already been taken'.freeze
 
   def index

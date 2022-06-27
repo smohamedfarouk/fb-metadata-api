@@ -30,6 +30,26 @@ RSpec.describe 'API integration tests' do
     ).deep_symbolize_keys
   end
   let(:request_body) { { "metadata": service }.to_json }
+  let(:component_id_one) { 'b27cb47a-95cf-44d8-be2b-75b2411c2188' }
+  let(:items_one) do
+    {
+      component_id: component_id_one,
+      data: [
+        {
+          "text": 'foo',
+          "value": 'bar'
+        },
+        {
+          "text": '123',
+          "value": 'abc'
+        },
+        {
+          "text": 'qweq',
+          "value": '0976'
+        }
+      ]
+    }
+  end
 
   def parse_response(response)
     JSON.parse(response.body, symbolize_names: true)
@@ -81,6 +101,125 @@ RSpec.describe 'API integration tests' do
         updated_metadata = parse_response(response)
         expect(response.code).to be(201)
         expect(updated_metadata).to include(pages: version[:pages])
+      end
+    end
+
+    context 'when new items are created' do
+      context 'when schema is valid' do
+        it 'returns the newly created items for that service' do
+          response = metadata_api_test_client.create_service(
+            body: request_body,
+            authorisation_headers: authorisation_headers
+          )
+          metadata = parse_response(response)
+
+          updated_payload = items_one.merge(
+            created_by: metadata[:created_by],
+            service_id: metadata[:service_id]
+          )
+
+          response = metadata_api_test_client.create_items(
+            service_id: metadata[:service_id],
+            component_id: items_one[:component_id],
+            body: updated_payload.to_json,
+            authorisation_headers: authorisation_headers
+          )
+
+          expect(response.code).to be(201)
+        end
+      end
+
+      context 'when schema is not valid' do
+        it 'returns a 422' do
+          response = metadata_api_test_client.create_service(
+            body: request_body,
+            authorisation_headers: authorisation_headers
+          )
+          metadata = parse_response(response)
+
+          response = metadata_api_test_client.create_items(
+            service_id: metadata[:service_id],
+            component_id: items_one[:component_id],
+            body: {},
+            authorisation_headers: authorisation_headers
+          )
+
+          expect(response.code).to be(422)
+        end
+      end
+    end
+
+    context 'getting all items for a service' do
+      let(:component_id_two) { '1c6bef50-d2a5-4c59-b4f9-8bb4667b3647' }
+      let(:items_two) do
+        {
+          component_id: component_id_two,
+          data: [
+            {
+              "text": 'cat',
+              "value": '100'
+            },
+            {
+              "text": 'dog',
+              "value": '200'
+            }
+          ]
+        }
+      end
+      let(:expected_response) do
+        [
+          {
+            "b27cb47a-95cf-44d8-be2b-75b2411c2188": [
+              { text: 'foo', value: 'bar' },
+              { text: '123', value: 'abc' },
+              { text: 'qweq', value: '0976' }
+            ]
+          },
+          {
+            "1c6bef50-d2a5-4c59-b4f9-8bb4667b3647": [
+              { text: 'cat', value: '100' },
+              { text: 'dog', value: '200' }
+            ]
+          }
+        ]
+      end
+      let(:hash) do
+        Hash[
+          component_id_one => items_one,
+          component_id_two => items_two
+        ]
+      end
+
+      it 'it should return all the items for that service' do
+        response = metadata_api_test_client.create_service(
+          body: request_body,
+          authorisation_headers: authorisation_headers
+        )
+        metadata = parse_response(response)
+
+        hash.map do |component_id, items|
+          updated_payload = items.merge(
+            created_by: metadata[:created_by],
+            service_id: metadata[:service_id]
+          )
+
+          metadata_api_test_client.create_items(
+            service_id: metadata[:service_id],
+            component_id: component_id,
+            body: updated_payload.to_json,
+            authorisation_headers: authorisation_headers
+          )
+        end
+
+        response = metadata_api_test_client.get_items_for_service(
+          service_id: metadata[:service_id],
+          authorisation_headers: authorisation_headers
+        )
+
+        all_items = parse_response(response)
+
+        expect(all_items[:service_id]).to eq(metadata[:service_id])
+        expect(all_items[:items]).to match_array(expected_response)
       end
     end
 

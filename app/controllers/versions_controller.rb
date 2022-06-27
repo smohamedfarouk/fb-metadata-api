@@ -1,4 +1,4 @@
-class VersionsController < ApplicationController
+class VersionsController < MetadataController
   def create
     if service.update(service_params)
       metadata = service.latest_metadata

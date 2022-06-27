@@ -57,4 +57,21 @@ class MetadataApiTestClient
       headers: headers.merge(authorisation_headers)
     )
   end
+
+  def get_items_for_service(service_id:, authorisation_headers:)
+    self.class.get(
+      "/services/#{service_id}/items/all",
+      headers: headers.merge(authorisation_headers)
+    )
+  end
+
+  def create_items(service_id:, component_id:, body:, authorisation_headers:)
+    self.class.post(
+      "/services/#{service_id}/components/#{component_id}/items/all",
+      {
+        body: body,
+        headers: headers.merge(authorisation_headers)
+      }
+    )
+  end
 end
