@@ -2,15 +2,15 @@ class ComponentItemsController < ApplicationController
   before_action :validate_items, only: :create
 
   def index
-    render json: ComponentItemsSerialiser.new(service.items, service).attributes, status: :ok
+    render json: ComponentItemsSerialiser.new(service.items, params[:service_id]).attributes, status: :ok
   end
 
   def create
     if new_items.save
-      render(status: :created)
+      render json: { message: 'Created' }, status: :created
     else
       render json: ErrorsSerializer.new(
-        message: service.errors.full_messages
+        message: new_items.errors.full_messages
       ).attributes, status: :unprocessable_entity
     end
   end

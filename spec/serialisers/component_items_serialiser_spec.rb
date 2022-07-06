@@ -16,7 +16,7 @@ RSpec.describe ComponentItemsSerialiser do
   let(:service) { Service.create!(service_params) }
   let(:items_params_one) do
     {
-      service: service,
+      service_id: service.id,
       component_id: '2f132e68-0e3b-48ed-a5ad-61f21fcb3d22',
       created_by: '0009212e-5925-4d28-a3f7-725774e2ac6b',
       data: [
@@ -33,7 +33,7 @@ RSpec.describe ComponentItemsSerialiser do
   end
   let(:items_params_two) do
     {
-      service: service,
+      service_id: service.id,
       component_id: 'a572cfd2-9ab5-447c-8e22-c852609cbf6d',
       created_by: '0009212e-5925-4d28-a3f7-725774e2ac6b',
       data: [
@@ -48,12 +48,13 @@ RSpec.describe ComponentItemsSerialiser do
       ]
     }
   end
+
   context 'items' do
     it 'items should be valid against the schema' do
       Items.create!(items_params_one)
       Items.create!(items_params_two)
       all_items = Items.where(service_id: service.id)
-      serialiser = ComponentItemsSerialiser.new(all_items, service)
+      serialiser = ComponentItemsSerialiser.new(all_items, service.id)
       expect(serialiser.attributes).to eq(
         {
           service_id: service.id,

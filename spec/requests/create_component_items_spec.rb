@@ -49,5 +49,11 @@ RSpec.describe 'POST /services/:id/components/:id/items/all', type: :request do
     it 'returns unprocessable entity' do
       expect(response.status).to be(422)
     end
+
+    it 'returns error messages' do
+      expect(JSON.parse(response.body)['message']).to eq(
+        ["Data can't be blank"]
+      )
+    end
   end
 end
