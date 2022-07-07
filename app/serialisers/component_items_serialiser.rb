@@ -17,7 +17,7 @@ end
 private
 
 def all_items
-  items.map do |item|
-    { item.component_id => item.data }
+  items.each_with_object({}) do |item, hash|
+    hash[item.component_id] = item.data
   end
 end

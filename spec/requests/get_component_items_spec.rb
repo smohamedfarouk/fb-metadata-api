@@ -64,20 +64,16 @@ RSpec.describe 'GET /services/:service_id/items/all' do
     end
 
     it 'returns all components and items for a service' do
-      expect(response_body['items']).to match_array(
-        [
-          {
-            '7a33f18e-c0dd-4a3b-bfb6-da48db2f8e3a' => [
-              { 'text' => 'demogorgon', 'value' => '100' },
-              { 'text' => 'mind flayer', 'value' => '200' }
-            ]
-          },
-          {
-            '37fe84cd-117f-42f4-a5e9-8a13cd9c3e34' => [
-              { 'text' => 'vecna', 'value' => '300' }
-            ]
-          }
-        ]
+      expect(response_body['items']).to eq(
+        {
+          '7a33f18e-c0dd-4a3b-bfb6-da48db2f8e3a' => [
+            { 'text' => 'demogorgon', 'value' => '100' },
+            { 'text' => 'mind flayer', 'value' => '200' }
+          ],
+          '37fe84cd-117f-42f4-a5e9-8a13cd9c3e34' => [
+            { 'text' => 'vecna', 'value' => '300' }
+          ]
+        }
       )
     end
   end
