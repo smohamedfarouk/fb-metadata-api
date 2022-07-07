@@ -58,21 +58,16 @@ RSpec.describe ComponentItemsSerialiser do
       expect(serialiser.attributes).to eq(
         {
           service_id: service.id,
-          items:
-          [
-            {
-              '2f132e68-0e3b-48ed-a5ad-61f21fcb3d22' => [
-                { 'text' => 'ragdoll', 'value' => '1' },
-                { 'text' => 'maine coon', 'value' => '2' }
-              ]
-            },
-            {
-              'a572cfd2-9ab5-447c-8e22-c852609cbf6d' => [
-                { 'text' => 'scottish fold', 'value' => '3' },
-                { 'text' => 'devon rex', 'value' => '4' }
-              ]
-            }
-          ]
+          items: {
+            '2f132e68-0e3b-48ed-a5ad-61f21fcb3d22' => [
+              { 'text' => 'ragdoll', 'value' => '1' },
+              { 'text' => 'maine coon', 'value' => '2' }
+            ],
+            'a572cfd2-9ab5-447c-8e22-c852609cbf6d' => [
+              { 'text' => 'scottish fold', 'value' => '3' },
+              { 'text' => 'devon rex', 'value' => '4' }
+            ]
+          }
         }
       )
     end

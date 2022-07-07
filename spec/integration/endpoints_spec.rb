@@ -167,21 +167,17 @@ RSpec.describe 'API integration tests' do
         }
       end
       let(:expected_response) do
-        [
-          {
-            "b27cb47a-95cf-44d8-be2b-75b2411c2188": [
-              { text: 'foo', value: 'bar' },
-              { text: '123', value: 'abc' },
-              { text: 'qweq', value: '0976' }
-            ]
-          },
-          {
-            "1c6bef50-d2a5-4c59-b4f9-8bb4667b3647": [
-              { text: 'cat', value: '100' },
-              { text: 'dog', value: '200' }
-            ]
-          }
-        ]
+        {
+          "b27cb47a-95cf-44d8-be2b-75b2411c2188": [
+            { text: 'foo', value: 'bar' },
+            { text: '123', value: 'abc' },
+            { text: 'qweq', value: '0976' }
+          ],
+          "1c6bef50-d2a5-4c59-b4f9-8bb4667b3647": [
+            { text: 'cat', value: '100' },
+            { text: 'dog', value: '200' }
+          ]
+        }
       end
       let(:hash) do
         Hash[
