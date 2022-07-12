@@ -1,5 +1,5 @@
 class ComponentItemsSerialiser
-  attr_accessor :items, :service_id
+  attr_reader :items, :service_id
 
   def initialize(items, service_id)
     @items = items

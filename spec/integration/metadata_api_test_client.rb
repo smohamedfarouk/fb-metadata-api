@@ -74,4 +74,13 @@ class MetadataApiTestClient
       }
     )
   end
+
+  def get_items_for_component(service_id:, component_id:, authorisation_headers:)
+    self.class.get(
+      "/services/#{service_id}/components/#{component_id}/items",
+      {
+        headers: headers.merge(authorisation_headers)
+      }
+    )
+  end
 end

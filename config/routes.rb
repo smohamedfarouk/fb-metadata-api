@@ -9,7 +9,8 @@ Rails.application.routes.draw do
     end
 
     get '/items/all', as: :items, to: 'component_items#index'
-    post 'components/:component_id/items/all', to: 'component_items#create'
+    get '/components/:component_id/items', to: 'component_items#show'
+    post '/components/:component_id/items/all', to: 'component_items#create'
   end
 
   match '*unmatched', to: 'application#not_found', via: :all
