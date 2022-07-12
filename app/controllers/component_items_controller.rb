@@ -5,6 +5,16 @@ class ComponentItemsController < ApplicationController
     render json: ComponentItemsSerialiser.new(service.items, params[:service_id]).attributes, status: :ok
   end
 
+  def show
+    if component_items.any?
+      render json: ComponentItemsSerialiser.new(component_items, params[:service_id]).attributes, status: :ok
+    else
+      render json: ErrorsSerializer.new(
+        message: "Component with id: #{params[:component_id]} has no items"
+      ).attributes, status: :not_found
+    end
+  end
+
   def create
     if new_items.save
       render json: { message: 'Created' }, status: :created
@@ -32,5 +42,9 @@ class ComponentItemsController < ApplicationController
       json: ErrorsSerializer.new(message: e.message).attributes,
       status: :unprocessable_entity
     )
+  end
+
+  def component_items
+    Items.where(service_id: params[:service_id], component_id: params[:component_id])
   end
 end
