@@ -52,7 +52,7 @@ RSpec.describe 'POST /services/:id/components/:id/items/all', type: :request do
 
     it 'returns error messages' do
       expect(JSON.parse(response.body)['message']).to eq(
-        ["Data can't be blank"]
+        ["The property '#/' of type null did not match the following type: array"]
       )
     end
   end
