@@ -32,11 +32,14 @@ class ComponentItemsController < ApplicationController
   end
 
   def items_params
-    params.permit(:service_id, :component_id, :created_by, data: %i[text value])
+    @items_params ||= params.permit(:service_id, :component_id, :created_by, data: %i[text value])
   end
 
   def validate_items
-    MetadataPresenter::ValidateSchema.validate(params[:data], 'definition.select')
+    MetadataPresenter::ValidateSchema.validate(
+      items_params.to_h['data'],
+      'definition.select'
+    )
   rescue JSON::Schema::ValidationError, JSON::Schema::SchemaError, SchemaNotFoundError => e
     render(
       json: ErrorsSerializer.new(message: e.message).attributes,
