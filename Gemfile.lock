@@ -75,7 +75,7 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     diff-lcs (1.5.0)
-    erubi (1.10.0)
+    erubi (1.11.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -236,13 +236,11 @@ GEM
     rubocop-rspec (2.12.1)
       rubocop (~> 1.31)
     ruby-progressbar (1.11.0)
-    sentry-rails (5.3.1)
+    sentry-rails (5.4.1)
       railties (>= 5.0)
-      sentry-ruby-core (~> 5.3.1)
+      sentry-ruby (~> 5.4.1)
     sentry-ruby (5.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-ruby-core (5.3.1)
-      concurrent-ruby
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -286,7 +284,7 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop (~> 1.31.2)
   rubocop-govuk
-  sentry-rails (~> 5.3.1)
+  sentry-rails (~> 5.4.1)
   sentry-ruby (~> 5.4.1)
   spring
   spring-watcher-listen (~> 2.0.0)
