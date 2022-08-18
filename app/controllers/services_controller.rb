@@ -2,7 +2,13 @@ class ServicesController < MetadataController
   SERVICE_EXISTS = 'Name has already been taken'.freeze
 
   def index
-    services = Service.order(name: :asc).page(page).per(per_page)
+    services = Service.order(name: :asc)
+
+    if name_query.present?
+      services = services.where(Service.arel_table[:name].matches("%#{Service.sanitize_sql_like(name_query)}%"))
+    end
+
+    services = services.page(page).per(per_page)
 
     render json: ServicesSerializer.new(services, total_services: true).attributes
   end
@@ -43,5 +49,9 @@ class ServicesController < MetadataController
 
   def per_page
     params[:per_page] || 20
+  end
+
+  def name_query
+    params[:name_query] || ''
   end
 end
