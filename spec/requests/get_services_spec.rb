@@ -19,7 +19,7 @@ RSpec.describe 'GET /services' do
   let!(:service_three) do
     create(
       :service,
-      name: 'Service 3',
+      name: 'Ze Numero 3',
       created_by: 'greedo',
       metadata: [build(:metadata, created_by: 'greedo')]
     )
@@ -111,6 +111,35 @@ RSpec.describe 'GET /services' do
           ]
         )
       end
+    end
+  end
+
+  context 'when filtering by name' do
+    let(:name_query) { 'nume' }
+
+    before do
+      allow_any_instance_of(Fb::Jwt::Auth).to receive(:verify!).and_return(true)
+      get "/services?name_query=#{name_query}", as: :json
+    end
+
+    it 'returns success response' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the total services' do
+      expect(response_body['total_services']).to be(3)
+    end
+
+    it 'returns services matching the name query' do
+      expect(response_body['services']).to match_array(
+        [
+          {
+            'service_name' => service_three.name,
+            'service_id' => service_three.id
+          }
+
+        ]
+      )
     end
   end
 end
