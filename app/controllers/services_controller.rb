@@ -6,11 +6,12 @@ class ServicesController < MetadataController
 
     if name_query.present?
       services = services.where(Service.arel_table[:name].matches("%#{Service.sanitize_sql_like(name_query)}%"))
+      query_results_count = services.count
     end
 
     services = services.page(page).per(per_page)
 
-    render json: ServicesSerializer.new(services, total_services: true).attributes
+    render json: ServicesSerializer.new(services, total_services: query_results_count || true).attributes
   end
 
   def create

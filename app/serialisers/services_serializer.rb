@@ -16,7 +16,7 @@ class ServicesSerializer
     response = { services: all_services }
 
     response.tap do
-      response[:total_services] = Service.count if total_services.present?
+      response[:total_services] = (total_services.is_a?(Integer) ? total_services : Service.count) if total_services.present?
     end
   end
 end

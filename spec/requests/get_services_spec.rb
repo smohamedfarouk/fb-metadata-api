@@ -127,7 +127,7 @@ RSpec.describe 'GET /services' do
     end
 
     it 'returns the total services' do
-      expect(response_body['total_services']).to be(3)
+      expect(response_body['total_services']).to be(1)
     end
 
     it 'returns services matching the name query' do
