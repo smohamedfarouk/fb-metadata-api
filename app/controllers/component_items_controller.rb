@@ -2,7 +2,7 @@ class ComponentItemsController < ApplicationController
   before_action :validate_items, only: :create
 
   def index
-    render json: ComponentItemsSerialiser.new(service.items, params[:service_id]).attributes, status: :ok
+    render json: ComponentItemsSerialiser.new(existing_component_items, params[:service_id]).attributes, status: :ok
   end
 
   def show
@@ -49,5 +49,15 @@ class ComponentItemsController < ApplicationController
 
   def component_items
     Items.where(service_id: params[:service_id], component_id: params[:component_id])
+  end
+
+  def existing_component_items
+    existing_component_uuids.map do |uuid|
+      Items.where(service: service, component_id: uuid).latest_version
+    end
+  end
+
+  def existing_component_uuids
+    service.latest_metadata.autocomplete_uuids
   end
 end

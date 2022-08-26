@@ -13,21 +13,48 @@ RSpec.describe 'GET /services/:service_id/items/all' do
         metadata: [metadata]
       )
     end
-    let(:metadata) do
-      build(:metadata, data: {
-        configuration: {
-          _id: 'service',
-          _type: 'config.service'
-        },
-        pages: []
-      })
+    let!(:service_2) do
+      create(
+        :service,
+        name: 'Service 2',
+        metadata: [build(:metadata)]
+      )
     end
-    let(:component_id_one) { '7a33f18e-c0dd-4a3b-bfb6-da48db2f8e3a' }
-    let(:component_id_two) { '37fe84cd-117f-42f4-a5e9-8a13cd9c3e34' }
+    let(:metadata) do
+      build(
+        :metadata,
+        data: {
+          configuration: {
+            _id: 'service',
+            _type: 'config.service'
+          },
+          pages: pages
+        }
+      )
+    end
+    let(:pages) do
+      [
+        {
+          'components': [
+            {
+              '_type': 'autocomplete',
+              '_uuid': component_id_one
+            },
+            {
+              '_type': 'autocomplete',
+              '_uuid': component_id_two
+            }
+          ]
+        }
+      ]
+    end
+    let(:component_id_one) { SecureRandom.uuid }
+    let(:component_id_two) { SecureRandom.uuid }
     let!(:items_one) do
       create(
         :items,
         service: service,
+        created_at: Time.zone.now - 1.day,
         component_id: component_id_one,
         data: [
           {
@@ -37,6 +64,28 @@ RSpec.describe 'GET /services/:service_id/items/all' do
           {
             "text": 'mind flayer',
             "value": '200'
+          }
+        ]
+      )
+    end
+    let!(:updated_items_one) do
+      create(
+        :items,
+        service: service,
+        created_at: Time.zone.now,
+        component_id: component_id_one,
+        data: [
+          {
+            "text": 'demogorgon',
+            "value": '100'
+          },
+          {
+            "text": 'mind flayer',
+            "value": '200'
+          },
+          {
+            "text": 'mothra',
+            "value": '500'
           }
         ]
       )
@@ -54,6 +103,19 @@ RSpec.describe 'GET /services/:service_id/items/all' do
         ]
       )
     end
+    let!(:another_service_items) do
+      create(
+        :items,
+        service: service_2,
+        component_id: SecureRandom.uuid,
+        data: [
+          {
+            "text": 'godzilla',
+            "value": '1000000'
+          }
+        ]
+      )
+    end
 
     before do
       get "/services/#{service.id}/items/all", as: :json
@@ -63,14 +125,15 @@ RSpec.describe 'GET /services/:service_id/items/all' do
       expect(response.status).to be(200)
     end
 
-    it 'returns all components and items for a service' do
+    it 'returns all expected components and items for a service' do
       expect(response_body['items']).to eq(
         {
-          '7a33f18e-c0dd-4a3b-bfb6-da48db2f8e3a' => [
+          component_id_one => [
             { 'text' => 'demogorgon', 'value' => '100' },
-            { 'text' => 'mind flayer', 'value' => '200' }
+            { 'text' => 'mind flayer', 'value' => '200' },
+            { 'text' => 'mothra', 'value' => '500' }
           ],
-          '37fe84cd-117f-42f4-a5e9-8a13cd9c3e34' => [
+          component_id_two => [
             { 'text' => 'vecna', 'value' => '300' }
           ]
         }

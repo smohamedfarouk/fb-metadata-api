@@ -22,6 +22,7 @@ group :development, :test do
   gem 'httparty'
   gem 'rspec_junit_formatter'
   gem 'rspec-rails'
+  gem 'timecop'
 end
 
 group :development do

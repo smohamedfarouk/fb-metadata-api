@@ -30,7 +30,7 @@ RSpec.describe 'API integration tests' do
     ).deep_symbolize_keys
   end
   let(:request_body) { { "metadata": service }.to_json }
-  let(:component_id_one) { 'b27cb47a-95cf-44d8-be2b-75b2411c2188' }
+  let(:component_id_one) { '4dc23b9c-9757-4526-813d-b43efbe07dad' } # from presenter fixture
   let(:items_one) do
     {
       component_id: component_id_one,
@@ -150,7 +150,7 @@ RSpec.describe 'API integration tests' do
     end
 
     context 'getting all items for a service' do
-      let(:component_id_two) { '1c6bef50-d2a5-4c59-b4f9-8bb4667b3647' }
+      let(:component_id_two) { '5d983fdb-bed1-46e2-b66d-992c409889d8' } # from presenter fixture
       let(:items_two) do
         {
           component_id: component_id_two,
@@ -168,39 +168,46 @@ RSpec.describe 'API integration tests' do
       end
       let(:expected_response) do
         {
-          "b27cb47a-95cf-44d8-be2b-75b2411c2188": [
+          "#{component_id_one}": [
             { text: 'foo', value: 'bar' },
             { text: '123', value: 'abc' },
             { text: 'qweq', value: '0976' }
-          ],
-          "1c6bef50-d2a5-4c59-b4f9-8bb4667b3647": [
-            { text: 'cat', value: '100' },
-            { text: 'dog', value: '200' }
           ]
         }
       end
-      let(:hash) do
+      let(:components_to_upload) do
         Hash[
           component_id_one => items_one,
           component_id_two => items_two
         ]
       end
 
-      it 'it should return all the items for that service' do
+      before do
         response = metadata_api_test_client.create_service(
           body: request_body,
           authorisation_headers: authorisation_headers
         )
-        metadata = parse_response(response)
 
-        hash.map do |component_id, items|
+        @metadata = parse_response(response)
+
+        updated_payload = { "metadata": version.merge(service_id: @metadata[:service_id]) }
+
+        metadata_api_test_client.new_version(
+          service_id: @metadata[:service_id],
+          body: updated_payload.to_json,
+          authorisation_headers: authorisation_headers
+        )
+      end
+
+      it 'it should return all the items for that service' do
+        components_to_upload.map do |component_id, items|
           updated_payload = items.merge(
-            created_by: metadata[:created_by],
-            service_id: metadata[:service_id]
+            created_by: @metadata[:created_by],
+            service_id: @metadata[:service_id]
           )
 
           metadata_api_test_client.create_items(
-            service_id: metadata[:service_id],
+            service_id: @metadata[:service_id],
             component_id: component_id,
             body: updated_payload.to_json,
             authorisation_headers: authorisation_headers
@@ -208,13 +215,13 @@ RSpec.describe 'API integration tests' do
         end
 
         response = metadata_api_test_client.get_items_for_service(
-          service_id: metadata[:service_id],
+          service_id: @metadata[:service_id],
           authorisation_headers: authorisation_headers
         )
 
         all_items = parse_response(response)
 
-        expect(all_items[:service_id]).to eq(metadata[:service_id])
+        expect(all_items[:service_id]).to eq(@metadata[:service_id])
         expect(all_items[:items]).to match_array(expected_response)
       end
     end
@@ -238,14 +245,14 @@ RSpec.describe 'API integration tests' do
       end
       let(:expected_response) do
         {
-          "b27cb47a-95cf-44d8-be2b-75b2411c2188": [
+          "#{component_id_one}": [
             { text: 'foo', value: 'bar' },
             { text: '123', value: 'abc' },
             { text: 'qweq', value: '0976' }
           ]
         }
       end
-      let(:hash) do
+      let(:components_to_upload) do
         Hash[
           component_id_one => items_one,
           component_id_two => items_two
@@ -260,7 +267,7 @@ RSpec.describe 'API integration tests' do
           )
           metadata = parse_response(response)
 
-          hash.map do |component_id, items|
+          components_to_upload.map do |component_id, items|
             updated_payload = items.merge(
               created_by: metadata[:created_by],
               service_id: metadata[:service_id]
@@ -283,6 +290,79 @@ RSpec.describe 'API integration tests' do
           all_items = parse_response(response)
 
           expect(all_items[:service_id]).to eq(metadata[:service_id])
+          expect(all_items[:items]).to match_array(expected_response)
+        end
+      end
+
+      context 'when a component has several uploaded items' do
+        let(:latest_items) do
+          {
+            component_id: component_id_one,
+            data: [{ "text": 'alpha', "value": 'verse' }]
+          }
+        end
+        let(:expected_response) do
+          {
+            "#{component_id_one}": [
+              { text: 'alpha', value: 'verse' }
+            ]
+          }
+        end
+
+        before do
+          response = metadata_api_test_client.create_service(
+            body: request_body,
+            authorisation_headers: authorisation_headers
+          )
+
+          @metadata = parse_response(response)
+
+          Timecop.freeze(Time.zone.now - 1.day) do
+            updated_payload = { "metadata": version.merge(service_id: @metadata[:service_id]) }
+
+            metadata_api_test_client.new_version(
+              service_id: @metadata[:service_id],
+              body: updated_payload.to_json,
+              authorisation_headers: authorisation_headers
+            )
+
+            components_to_upload.map do |component_id, items|
+              updated_payload = items.merge(
+                created_by: @metadata[:created_by],
+                service_id: @metadata[:service_id]
+              )
+
+              metadata_api_test_client.create_items(
+                service_id: @metadata[:service_id],
+                component_id: component_id,
+                body: updated_payload.to_json,
+                authorisation_headers: authorisation_headers
+              )
+            end
+          end
+        end
+
+        it 'returns the latest uploaded items' do
+          updated_payload = latest_items.merge(
+            created_by: @metadata[:created_by],
+            service_id: @metadata[:service_id]
+          )
+
+          metadata_api_test_client.create_items(
+            service_id: @metadata[:service_id],
+            component_id: component_id_one,
+            body: updated_payload.to_json,
+            authorisation_headers: authorisation_headers
+          )
+
+          response = metadata_api_test_client.get_items_for_service(
+            service_id: @metadata[:service_id],
+            authorisation_headers: authorisation_headers
+          )
+
+          all_items = parse_response(response)
+
+          expect(all_items[:service_id]).to eq(@metadata[:service_id])
           expect(all_items[:items]).to match_array(expected_response)
         end
       end
