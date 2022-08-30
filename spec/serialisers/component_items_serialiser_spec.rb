@@ -50,14 +50,16 @@ RSpec.describe ComponentItemsSerialiser do
   end
 
   context 'items' do
+    let!(:items_one) { Items.create(items_params_one) }
+    let!(:items_two) { Items.create(items_params_two) }
+
     it 'items should be valid against the schema' do
-      Items.create!(items_params_one)
-      Items.create!(items_params_two)
       all_items = Items.where(service_id: service.id)
       serialiser = ComponentItemsSerialiser.new(all_items, service.id)
       expect(serialiser.attributes).to eq(
         {
           service_id: service.id,
+          autocomplete_ids: [items_one.id, items_two.id],
           items: {
             '2f132e68-0e3b-48ed-a5ad-61f21fcb3d22' => [
               { 'text' => 'ragdoll', 'value' => '1' },
