@@ -253,6 +253,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     thor (1.2.1)
+    timecop (0.9.5)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2022.3)
@@ -288,6 +289,7 @@ DEPENDENCIES
   sentry-ruby (~> 5.4.1)
   spring
   spring-watcher-listen (~> 2.0.0)
+  timecop
   tzinfo-data
 
 RUBY VERSION

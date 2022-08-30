@@ -11,9 +11,16 @@ FactoryBot.define do
   end
 
   factory :items do
-    data { [] }
     created_by { 'Fay' }
     service_id { SecureRandom.uuid }
     component_id { SecureRandom.uuid }
+    data do
+      [
+        { 'text' => 'jack', 'value' => 'bauer' },
+        { 'text' => 'james', 'value' => 'bond' },
+        { 'text' => 'jason', 'value' => 'bourne' },
+        { 'text' => 'jack', 'value' => 'burton' }
+      ]
+    end
   end
 end
