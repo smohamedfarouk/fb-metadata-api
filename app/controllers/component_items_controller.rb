@@ -58,6 +58,6 @@ class ComponentItemsController < ApplicationController
   end
 
   def existing_component_uuids
-    service.latest_metadata.autocomplete_uuids
+    service.latest_metadata.autocomplete_component_uuids
   end
 end

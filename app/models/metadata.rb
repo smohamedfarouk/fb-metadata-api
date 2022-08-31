@@ -7,17 +7,27 @@ class Metadata < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
   scope :all_versions, -> { select(:id, :created_at) }
 
-  def autocomplete_uuids
-    autocomplete_components.map { |component| component['_uuid'] }
+  def autocomplete_component_uuids
+    autocomplete_components.map(&:uuid)
   end
 
   private
 
-  def all_components
-    data['pages'].map { |page| page['components'] }.compact
+  def autocomplete_components
+    all_components.select(&:autocomplete?)
   end
 
-  def autocomplete_components
-    all_components.flatten.select { |c| c['_type'] == 'autocomplete' }
+  def all_components
+    all_pages.map(&:components).flatten
+  end
+
+  def all_pages
+    grid.page_uuids.map do |uuid|
+      grid.service.find_page_by_uuid(uuid)
+    end
+  end
+
+  def grid
+    MetadataPresenter::Grid.new(MetadataPresenter::Service.new(data))
   end
 end
