@@ -45,6 +45,14 @@ RSpec.describe 'GET /services/:service_id/items/all' do
               '_uuid': component_id_two
             }
           ]
+        },
+        {
+          'components': [
+            {
+              '_type': 'autocomplete',
+              '_uuid': SecureRandom.uuid # page with no uploaded items
+            }
+          ]
         }
       ]
     end

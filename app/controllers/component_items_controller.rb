@@ -52,9 +52,9 @@ class ComponentItemsController < ApplicationController
   end
 
   def existing_component_items
-    existing_component_uuids.map do |uuid|
+    existing_component_uuids.map { |uuid|
       Items.where(service: service, component_id: uuid).latest_version
-    end
+    }.flatten
   end
 
   def existing_component_uuids
