@@ -6,9 +6,14 @@ RSpec.describe 'GET /services/:service_id/items/all' do
   end
 
   context 'when service exists' do
+    let(:service_metadata) do
+      JSON.parse(File.read(Rails.root.join('spec', 'fixtures', 'autocomplete.json')))
+    end
+    let(:service_id) { service_metadata['service_id'] }
     let!(:service) do
       create(
         :service,
+        id: service_id,
         name: 'Service 1',
         metadata: [metadata]
       )
@@ -23,41 +28,16 @@ RSpec.describe 'GET /services/:service_id/items/all' do
     let(:metadata) do
       build(
         :metadata,
-        data: {
-          configuration: {
-            _id: 'service',
-            _type: 'config.service'
-          },
-          pages: pages
-        }
+        data: service_metadata
       )
     end
-    let(:pages) do
-      [
-        {
-          'components': [
-            {
-              '_type': 'autocomplete',
-              '_uuid': component_id_one
-            },
-            {
-              '_type': 'autocomplete',
-              '_uuid': component_id_two
-            }
-          ]
-        },
-        {
-          'components': [
-            {
-              '_type': 'autocomplete',
-              '_uuid': SecureRandom.uuid # page with no uploaded items
-            }
-          ]
-        }
-      ]
+    let(:autocomplete_service) { MetadataPresenter::Service.new(service_metadata) }
+    let(:component_id_one) do
+      autocomplete_service.find_page_by_url('cakes').components.first.uuid
     end
-    let(:component_id_one) { SecureRandom.uuid }
-    let(:component_id_two) { SecureRandom.uuid }
+    let(:component_id_two) do
+      autocomplete_service.find_page_by_url('biscuits').components.first.uuid
+    end
     let!(:items_one) do
       create(
         :items,
@@ -145,6 +125,12 @@ RSpec.describe 'GET /services/:service_id/items/all' do
             { 'text' => 'vecna', 'value' => '300' }
           ]
         }
+      )
+    end
+
+    it 'returns all expected autocomplete ids' do
+      expect(response_body['autocomplete_ids']).to eq(
+        [updated_items_one.id, items_two.id]
       )
     end
   end
