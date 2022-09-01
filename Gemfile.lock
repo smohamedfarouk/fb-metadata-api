@@ -239,7 +239,7 @@ GEM
     sentry-rails (5.4.1)
       railties (>= 5.0)
       sentry-ruby (~> 5.4.1)
-    sentry-ruby (5.4.1)
+    sentry-ruby (5.4.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
@@ -286,7 +286,7 @@ DEPENDENCIES
   rubocop (~> 1.31.2)
   rubocop-govuk
   sentry-rails (~> 5.4.1)
-  sentry-ruby (~> 5.4.1)
+  sentry-ruby (~> 5.4.2)
   spring
   spring-watcher-listen (~> 2.0.0)
   timecop
