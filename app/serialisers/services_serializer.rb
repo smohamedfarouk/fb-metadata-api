@@ -1,7 +1,7 @@
 class ServicesSerializer
   attr_reader :services, :total_services
 
-  def initialize(services, total_services: false)
+  def initialize(services, total_services: nil)
     @services = services
     @total_services = total_services
   end
@@ -16,7 +16,7 @@ class ServicesSerializer
     response = { services: all_services }
 
     response.tap do
-      response[:total_services] = Service.count if total_services.present?
+      response[:total_services] = total_services if total_services.present?
     end
   end
 end

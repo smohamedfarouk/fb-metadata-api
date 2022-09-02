@@ -8,9 +8,10 @@ class ServicesController < MetadataController
       services = services.where(Service.arel_table[:name].matches("%#{Service.sanitize_sql_like(name_query)}%"))
     end
 
+    total_services = services.count
     services = services.page(page).per(per_page)
 
-    render json: ServicesSerializer.new(services, total_services: true).attributes
+    render json: ServicesSerializer.new(services, total_services: total_services).attributes
   end
 
   def create
