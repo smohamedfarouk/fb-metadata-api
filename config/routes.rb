@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get '/users/:user_id', to: 'services#services_for_user', on: :collection
     resources :versions, only: [:index, :create, :show] do
       get :latest, on: :collection
+      get :previous, on: :collection
     end
 
     get '/items/all', as: :items, to: 'component_items#index'

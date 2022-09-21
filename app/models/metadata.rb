@@ -4,6 +4,7 @@ class Metadata < ApplicationRecord
 
   scope :by_locale, ->(locale) { where(locale: locale) }
   scope :latest_version, -> { ordered.first }
+  scope :previous_version, -> { ordered.second }
   scope :ordered, -> { order(created_at: :desc) }
   scope :all_versions, -> { select(:id, :created_at) }
 
