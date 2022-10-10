@@ -11,8 +11,8 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'prometheus-client', '~> 2.1.0'
 gem 'puma', '~> 5.6'
 gem 'rails', '~> 6.1.7'
-gem 'sentry-rails', '~> 5.4.2'
-gem 'sentry-ruby', '~> 5.4.2'
+gem 'sentry-rails', '~> 5.5.0'
+gem 'sentry-ruby', '~> 5.5.0'
 gem 'tzinfo-data'
 
 group :development, :test do
