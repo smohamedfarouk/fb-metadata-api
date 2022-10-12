@@ -14,9 +14,14 @@ class VersionsController < MetadataController
     end
   end
 
+  def previous
+    metadata = service.metadata.by_locale(locale).previous_version
+
+    render json: MetadataSerialiser.new(service, metadata).attributes, status: :ok
+  end
+
   def latest
     metadata = service.metadata.by_locale(locale).latest_version
-
     render json: MetadataSerialiser.new(service, metadata).attributes, status: :ok
   end
 
