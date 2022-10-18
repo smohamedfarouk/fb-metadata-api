@@ -131,7 +131,7 @@ jobs:
       PGPASSWORD: password
       PGUSER: postgres
       RAILS_ENV: test
-    parallelism: 5
+    parallelism: 4
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
