@@ -74,6 +74,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    date (3.3.1)
     diff-lcs (1.5.0)
     erubi (1.11.0)
     factory_bot (6.2.0)
@@ -130,7 +131,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.2)
-    metadata_presenter (2.17.27)
+    metadata_presenter (2.17.28)
       govuk_design_system_formbuilder (>= 2.1.5)
       json-schema (= 2.8.1)
       kramdown (>= 2.3.0)
@@ -144,11 +145,12 @@ GEM
     minitest (5.16.3)
     msgpack (1.6.0)
     multi_xml (0.6.0)
-    net-imap (0.3.1)
+    net-imap (0.3.2)
+      date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.0)
+    net-protocol (0.2.1)
       timeout
     net-smtp (0.3.3)
       net-protocol
@@ -161,7 +163,7 @@ GEM
       ast (~> 2.4.1)
     pg (1.4.5)
     prometheus-client (2.1.0)
-    public_suffix (5.0.0)
+    public_suffix (5.0.1)
     puma (5.6.5)
       nio4r (~> 2.0)
     racc (1.6.1)
@@ -288,7 +290,7 @@ DEPENDENCIES
   fb-jwt-auth (~> 0.8.0)
   httparty
   kaminari
-  metadata_presenter (~> 2.17.27)
+  metadata_presenter (~> 2.17.28)
   pg (>= 0.18, < 2.0)
   prometheus-client (~> 2.1.0)
   puma (~> 5.6)
