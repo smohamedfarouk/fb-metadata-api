@@ -74,7 +74,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    date (3.3.1)
+    date (3.3.3)
     diff-lcs (1.5.0)
     erubi (1.11.0)
     factory_bot (6.2.0)
@@ -131,7 +131,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.2)
-    metadata_presenter (2.17.28)
+    metadata_presenter (2.17.29)
       govuk_design_system_formbuilder (>= 2.1.5)
       json-schema (= 2.8.1)
       kramdown (>= 2.3.0)
@@ -290,7 +290,7 @@ DEPENDENCIES
   fb-jwt-auth (~> 0.8.0)
   httparty
   kaminari
-  metadata_presenter (~> 2.17.28)
+  metadata_presenter (~> 2.17.29)
   pg (>= 0.18, < 2.0)
   prometheus-client (~> 2.1.0)
   puma (~> 6.0)
