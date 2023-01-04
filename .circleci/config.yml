@@ -7,7 +7,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: 'cimg/ruby:2.7.5'
+      - image: 'cimg/ruby:2.7.7'
     steps:
       - checkout
       - ruby/install-deps
@@ -18,7 +18,7 @@ jobs:
           include_job_number_field: false
   lint:
     docker:
-      - image: 'cimg/ruby:2.7.5'
+      - image: 'cimg/ruby:2.7.7'
     steps:
       - checkout
       - ruby/install-deps
@@ -28,7 +28,7 @@ jobs:
       - slack/status: *slack_status
   security:
     docker:
-      - image: 'cimg/ruby:2.7.5'
+      - image: 'cimg/ruby:2.7.7'
     steps:
       - checkout
       - ruby/install-deps
@@ -37,7 +37,7 @@ jobs:
   test:
     working_directory: ~/circle
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.7
     steps:
       - checkout
       - setup_remote_docker: &remote_docker
@@ -117,7 +117,7 @@ jobs:
           include_job_number_field: false
   editor_acceptance_tests_eks:
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.7
       - environment:
           POSTGRES_DB: editor_local
           POSTGRES_PASSWORD: password
