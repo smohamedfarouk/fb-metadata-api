@@ -66,7 +66,7 @@ jobs:
           name: Setup base environment variable
           command: |
             echo "export BUILD_SHA=$CIRCLE_SHA1" >> $BASH_ENV
-            echo "export SSH_FILE_FOR_SECRETS=~/.ssh/id_rsa_a99c0fa22f774180b884e0c810a4eb2e" >> $BASH_ENV
+            echo "export SSH_FILE_FOR_SECRETS=~/.ssh/id_rsa_d8c6c158ff1732a896f283a6e7e7e838" >> $BASH_ENV
       - run: &deploy_scripts
           name: cloning deploy scripts
           command: 'git clone git@github.com:ministryofjustice/fb-deploy.git deploy-scripts'
@@ -83,7 +83,7 @@ jobs:
       - setup_remote_docker: *remote_docker
       - add_ssh_keys: &ssh_keys
           fingerprints:
-            - a9:9c:0f:a2:2f:77:41:80:b8:84:e0:c8:10:a4:eb:2e
+            - d8:c6:c1:58:ff:17:32:a8:96:f2:83:a6:e7:e7:e8:38
       - run: *base_environment_variables
       - run: *deploy_scripts
       - run:
@@ -183,6 +183,8 @@ workflows:
             - build
       - test
       - build_and_push_image:
+          context: &context
+            - moj-forms
           requires:
             - lint
             - security
@@ -192,11 +194,14 @@ workflows:
               only:
                 - main
       - deploy_to_test_eks:
+          context: *context
           requires:
             - build_and_push_image
       - editor_acceptance_tests_eks:
+          context: *context
           requires:
             - deploy_to_test_eks
       - deploy_to_live_eks:
+          context: *context
           requires:
             - editor_acceptance_tests_eks
