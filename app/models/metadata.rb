@@ -2,7 +2,7 @@ class Metadata < ApplicationRecord
   belongs_to :service
   validates :locale, :data, :created_by, presence: true
 
-  scope :by_locale, ->(locale) { where(locale: locale) }
+  scope :by_locale, ->(locale) { where(locale:) }
   scope :latest_version, -> { ordered.first }
   scope :previous_version, -> { ordered.second }
   scope :ordered, -> { order(created_at: :desc) }

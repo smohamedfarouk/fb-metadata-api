@@ -60,7 +60,7 @@ RSpec.describe 'API integration tests' do
       it 'we can request a specific version' do
         response = metadata_api_test_client.create_service(
           body: { "metadata": service }.to_json,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         metadata = parse_response(response)
@@ -70,15 +70,15 @@ RSpec.describe 'API integration tests' do
         service_id = metadata[:service_id]
         version_id = metadata[:version_id]
         response = metadata_api_test_client.get_version(
-          service_id: service_id,
-          version_id: version_id,
-          authorisation_headers: authorisation_headers
+          service_id:,
+          version_id:,
+          authorisation_headers:
         )
 
         metadata = parse_response(response)
         expect(response.code).to be(200)
         expect(metadata).to include(
-          service.merge({ service_id: service_id, version_id: version_id })
+          service.merge({ service_id:, version_id: })
         )
       end
     end
@@ -87,7 +87,7 @@ RSpec.describe 'API integration tests' do
       it 'returns the newly created service version' do
         response = metadata_api_test_client.create_service(
           body: request_body,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
         metadata = parse_response(response)
 
@@ -95,7 +95,7 @@ RSpec.describe 'API integration tests' do
         response = metadata_api_test_client.new_version(
           service_id: metadata[:service_id],
           body: updated_payload.to_json,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         updated_metadata = parse_response(response)
@@ -109,7 +109,7 @@ RSpec.describe 'API integration tests' do
         it 'returns the newly created items for that service' do
           response = metadata_api_test_client.create_service(
             body: request_body,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
           metadata = parse_response(response)
 
@@ -122,7 +122,7 @@ RSpec.describe 'API integration tests' do
             service_id: metadata[:service_id],
             component_id: items_one[:component_id],
             body: updated_payload.to_json,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           expect(response.code).to be(201)
@@ -133,7 +133,7 @@ RSpec.describe 'API integration tests' do
         it 'returns a 422' do
           response = metadata_api_test_client.create_service(
             body: request_body,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
           metadata = parse_response(response)
 
@@ -141,7 +141,7 @@ RSpec.describe 'API integration tests' do
             service_id: metadata[:service_id],
             component_id: items_one[:component_id],
             body: {},
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           expect(response.code).to be(422)
@@ -185,7 +185,7 @@ RSpec.describe 'API integration tests' do
       before do
         response = metadata_api_test_client.create_service(
           body: request_body,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         @metadata = parse_response(response)
@@ -195,7 +195,7 @@ RSpec.describe 'API integration tests' do
         metadata_api_test_client.new_version(
           service_id: @metadata[:service_id],
           body: updated_payload.to_json,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
       end
 
@@ -208,15 +208,15 @@ RSpec.describe 'API integration tests' do
 
           metadata_api_test_client.create_items(
             service_id: @metadata[:service_id],
-            component_id: component_id,
+            component_id:,
             body: updated_payload.to_json,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
         end
 
         response = metadata_api_test_client.get_items_for_service(
           service_id: @metadata[:service_id],
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         all_items = parse_response(response)
@@ -263,7 +263,7 @@ RSpec.describe 'API integration tests' do
         it 'it should return all the items for that component' do
           response = metadata_api_test_client.create_service(
             body: request_body,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
           metadata = parse_response(response)
 
@@ -275,16 +275,16 @@ RSpec.describe 'API integration tests' do
 
             metadata_api_test_client.create_items(
               service_id: metadata[:service_id],
-              component_id: component_id,
+              component_id:,
               body: updated_payload.to_json,
-              authorisation_headers: authorisation_headers
+              authorisation_headers:
             )
           end
 
           response = metadata_api_test_client.get_items_for_component(
             service_id: metadata[:service_id],
             component_id: component_id_one,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           all_items = parse_response(response)
@@ -312,7 +312,7 @@ RSpec.describe 'API integration tests' do
         before do
           response = metadata_api_test_client.create_service(
             body: request_body,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           @metadata = parse_response(response)
@@ -323,7 +323,7 @@ RSpec.describe 'API integration tests' do
             metadata_api_test_client.new_version(
               service_id: @metadata[:service_id],
               body: updated_payload.to_json,
-              authorisation_headers: authorisation_headers
+              authorisation_headers:
             )
 
             components_to_upload.map do |component_id, items|
@@ -334,9 +334,9 @@ RSpec.describe 'API integration tests' do
 
               metadata_api_test_client.create_items(
                 service_id: @metadata[:service_id],
-                component_id: component_id,
+                component_id:,
                 body: updated_payload.to_json,
-                authorisation_headers: authorisation_headers
+                authorisation_headers:
               )
             end
           end
@@ -352,12 +352,12 @@ RSpec.describe 'API integration tests' do
             service_id: @metadata[:service_id],
             component_id: component_id_one,
             body: updated_payload.to_json,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           response = metadata_api_test_client.get_items_for_service(
             service_id: @metadata[:service_id],
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           all_items = parse_response(response)
@@ -371,14 +371,14 @@ RSpec.describe 'API integration tests' do
         it 'returns a 404' do
           response = metadata_api_test_client.create_service(
             body: request_body,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
           metadata = parse_response(response)
 
           response = metadata_api_test_client.get_items_for_component(
             service_id: metadata[:service_id],
             component_id: '123456789',
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           expect(response.code).to be(404)
@@ -391,7 +391,7 @@ RSpec.describe 'API integration tests' do
       it 'returns all the versions for that service' do
         response = metadata_api_test_client.create_service(
           body: request_body,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
         metadata = parse_response(response)
 
@@ -406,7 +406,7 @@ RSpec.describe 'API integration tests' do
           new_version = parse_response(metadata_api_test_client.new_version(
                                          service_id: metadata[:service_id],
                                          body: { "metadata": metadata }.to_json,
-                                         authorisation_headers: authorisation_headers
+                                         authorisation_headers:
                                        ))
 
           {
@@ -417,7 +417,7 @@ RSpec.describe 'API integration tests' do
 
         response = metadata_api_test_client.all_versions(
           service_id: metadata[:service_id],
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         all_versions = parse_response(response)
@@ -425,7 +425,7 @@ RSpec.describe 'API integration tests' do
 
         response = metadata_api_test_client.get_latest_version(
           service_id: metadata[:service_id],
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         latest_version = parse_response(response)
@@ -445,7 +445,7 @@ RSpec.describe 'API integration tests' do
                                              'service_name': "Service #{number}"
                                            )
                                          }.to_json,
-                                         authorisation_headers: authorisation_headers
+                                         authorisation_headers:
                                        ))
 
           {
@@ -460,12 +460,12 @@ RSpec.describe 'API integration tests' do
               "service_name": 'Moff Gideon'
             )
           }.to_json,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         services_for_user = parse_response(metadata_api_test_client.get_services_for_user(
-                                             user_id: user_id,
-                                             authorisation_headers: authorisation_headers
+                                             user_id:,
+                                             authorisation_headers:
                                            ))[:services]
 
         expect(services_for_user).to match_array(services.flatten)
@@ -478,8 +478,8 @@ RSpec.describe 'API integration tests' do
 
         it 'returns 404 with a message' do
           response = metadata_api_test_client.get_latest_version(
-            service_id: service_id,
-            authorisation_headers: authorisation_headers
+            service_id:,
+            authorisation_headers:
           )
 
           expect(response.code).to be(404)
@@ -488,9 +488,9 @@ RSpec.describe 'API integration tests' do
           ).to match_array(["Couldn't find Service with 'id'=#{service_id}"])
 
           response = metadata_api_test_client.get_version(
-            service_id: service_id,
+            service_id:,
             version_id: SecureRandom.uuid,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
 
           expect(response.code).to be(404)
@@ -506,14 +506,14 @@ RSpec.describe 'API integration tests' do
         it 'returns not found with a message' do
           response = metadata_api_test_client.create_service(
             body: request_body,
-            authorisation_headers: authorisation_headers
+            authorisation_headers:
           )
           service_id = parse_response(response)[:service_id]
 
           response = metadata_api_test_client.get_version(
-            service_id: service_id,
-            version_id: version_id,
-            authorisation_headers: authorisation_headers
+            service_id:,
+            version_id:,
+            authorisation_headers:
           )
 
           expect(response.code).to be(404)
@@ -528,7 +528,7 @@ RSpec.describe 'API integration tests' do
       it 'returns unprocessable entity with a message for create service' do
         response = metadata_api_test_client.create_service(
           body: { "metadata": {} }.to_json,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         expect(response.code).to be(422)
@@ -543,7 +543,7 @@ RSpec.describe 'API integration tests' do
         response = metadata_api_test_client.new_version(
           service_id: '4634ec01-5618-45ec-a4e2-bb5aa587e751',
           body: { "metadata": {} }.to_json,
-          authorisation_headers: authorisation_headers
+          authorisation_headers:
         )
 
         expect(response.code).to be(422)
@@ -573,7 +573,7 @@ RSpec.describe 'API integration tests' do
     it 'returns 403 with issuer not present message' do
       response = metadata_api_test_client.create_service(
         body: request_body,
-        authorisation_headers: authorisation_headers
+        authorisation_headers:
       )
 
       expect(response.code).to be(403)
@@ -591,7 +591,7 @@ RSpec.describe 'API integration tests' do
     it 'returns 403 with namespace not present message' do
       response = metadata_api_test_client.create_service(
         body: request_body,
-        authorisation_headers: authorisation_headers
+        authorisation_headers:
       )
 
       expect(response.code).to be(403)
@@ -613,7 +613,7 @@ RSpec.describe 'API integration tests' do
     it 'returns 403 with a token has expired message' do
       response = metadata_api_test_client.create_service(
         body: request_body,
-        authorisation_headers: authorisation_headers
+        authorisation_headers:
       )
 
       expect(response.code).to be(403)

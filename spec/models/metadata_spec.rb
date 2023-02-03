@@ -1,7 +1,7 @@
 RSpec.describe Metadata, type: :model do
   subject(:metadata) do
     Metadata.new(
-      service: service,
+      service:,
       locale: 'en',
       data: service_metadata,
       created_by: 'Maverick'
@@ -29,16 +29,16 @@ RSpec.describe Metadata, type: :model do
       let(:expected_uuids) { [component_id_one, component_id_two, component_id_three] }
 
       before do
-        create(:metadata, service: service, data: service_metadata)
+        create(:metadata, service:, data: service_metadata)
         create(
           :items,
-          service: service,
+          service:,
           component_id: component_id_one,
           service_id: service.id
         )
         create(
           :items,
-          service: service,
+          service:,
           component_id: component_id_two,
           service_id: service.id
         )
@@ -53,7 +53,7 @@ RSpec.describe Metadata, type: :model do
       let(:service_metadata) do
         JSON.parse(File.read(fixtures_directory.join('branching.json')))
       end
-      let(:metadata) { create(:metadata, service: service, data: service_metadata) }
+      let(:metadata) { create(:metadata, service:, data: service_metadata) }
 
       it 'returns empty' do
         expect(metadata.autocomplete_component_uuids).to be_empty

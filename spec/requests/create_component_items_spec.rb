@@ -6,14 +6,14 @@ RSpec.describe 'POST /services/:id/components/:id/items/all', type: :request do
 
   before do
     allow_any_instance_of(Fb::Jwt::Auth).to receive(:verify!).and_return(true)
-    post "/services/#{service.id}/components/#{component_id}/items/all", params: params, as: :json
+    post "/services/#{service.id}/components/#{component_id}/items/all", params:, as: :json
   end
 
   let(:items) do
     {
       service_id: service.id,
       created_by: service.created_by,
-      component_id: component_id,
+      component_id:,
       data: [{
         "text": 'foo',
         "value": 'bar'

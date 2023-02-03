@@ -14,7 +14,7 @@ class MetadataApiTestClient
     self.class.post(
       '/services',
       {
-        body: body,
+        body:,
         headers: headers.merge(authorisation_headers)
       }
     )
@@ -31,7 +31,7 @@ class MetadataApiTestClient
     self.class.post(
       "/services/#{service_id}/versions",
       {
-        body: body,
+        body:,
         headers: headers.merge(authorisation_headers)
       }
     )
@@ -69,7 +69,7 @@ class MetadataApiTestClient
     self.class.post(
       "/services/#{service_id}/components/#{component_id}/items/all",
       {
-        body: body,
+        body:,
         headers: headers.merge(authorisation_headers)
       }
     )
