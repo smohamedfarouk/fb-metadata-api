@@ -11,13 +11,7 @@ class MetadataApiTestClient
   end
 
   def create_service(body:, authorisation_headers:)
-    self.class.post(
-      '/services',
-      {
-        body:,
-        headers: headers.merge(authorisation_headers)
-      }
-    )
+    self.class.post('/services', **{ headers: headers.merge(authorisation_headers), body: })
   end
 
   def get_version(service_id:, version_id:, authorisation_headers:)
