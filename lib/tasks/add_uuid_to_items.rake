@@ -23,7 +23,7 @@ task add_uuid_to_items: :environment do |_t, _args|
     end
 
     service.metadata.create!(
-      data: data,
+      data:,
       locale: latest_metadata.locale,
       created_by: latest_metadata.created_by
     )

@@ -11,7 +11,7 @@ class ServicesController < MetadataController
     total_services = services.count
     services = services.page(page).per(per_page)
 
-    render json: ServicesSerializer.new(services, total_services: total_services).attributes
+    render json: ServicesSerializer.new(services, total_services:).attributes
   end
 
   def create

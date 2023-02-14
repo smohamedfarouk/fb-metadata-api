@@ -41,7 +41,7 @@ RSpec.describe 'GET /services/:service_id/items/all' do
     let!(:items_one) do
       create(
         :items,
-        service: service,
+        service:,
         created_at: Time.zone.now - 1.day,
         component_id: component_id_one,
         data: [
@@ -59,7 +59,7 @@ RSpec.describe 'GET /services/:service_id/items/all' do
     let!(:updated_items_one) do
       create(
         :items,
-        service: service,
+        service:,
         created_at: Time.zone.now,
         component_id: component_id_one,
         data: [
@@ -81,7 +81,7 @@ RSpec.describe 'GET /services/:service_id/items/all' do
     let!(:items_two) do
       create(
         :items,
-        service: service,
+        service:,
         component_id: component_id_two,
         data: [
           {

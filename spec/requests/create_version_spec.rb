@@ -4,7 +4,7 @@ RSpec.describe 'POST /services/:id/versions' do
 
   before do
     allow_any_instance_of(Fb::Jwt::Auth).to receive(:verify!).and_return(true)
-    post "/services/#{service.id}/versions", params: params, as: :json
+    post "/services/#{service.id}/versions", params:, as: :json
   end
   let(:version) do
     JSON.parse(

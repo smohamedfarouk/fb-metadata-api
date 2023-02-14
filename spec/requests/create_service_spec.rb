@@ -1,7 +1,7 @@
 RSpec.describe 'POST /services', type: :request do
   include_examples 'application authentication' do
     let(:action) do
-      post '/services', params: params, as: :json
+      post '/services', params:, as: :json
     end
   end
   let(:response_body) { JSON.parse(response.body) }
@@ -13,7 +13,7 @@ RSpec.describe 'POST /services', type: :request do
 
   before do
     allow_any_instance_of(Fb::Jwt::Auth).to receive(:verify!).and_return(true)
-    post '/services', params: params, as: :json
+    post '/services', params:, as: :json
   end
 
   context 'when valid attributes' do
@@ -67,7 +67,7 @@ RSpec.describe 'POST /services', type: :request do
   context 'when form name already exists' do
     let(:params) { { metadata: service } }
     before do
-      post '/services', params: params, as: :json
+      post '/services', params:, as: :json
     end
 
     it 'returns unprocessable entity' do
