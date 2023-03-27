@@ -133,6 +133,7 @@ jobs:
       RAILS_ENV: test
     parallelism: 4
     steps:
+      - checkout
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
