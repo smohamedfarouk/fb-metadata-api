@@ -36,9 +36,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  # rubocop:disable Rails/FilePath
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
-  # rubocop:enable Rails/FilePath
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 
