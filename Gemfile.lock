@@ -518,10 +518,10 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sentry-rails (5.8.0)
+    sentry-rails (5.10.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.8.0)
-    sentry-ruby (5.8.0)
+      sentry-ruby (~> 5.10.0)
+    sentry-ruby (5.10.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     spring (4.1.1)
     spring-watcher-listen (2.1.0)
@@ -571,8 +571,8 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop (~> 1.53.1)
   rubocop-govuk
-  sentry-rails (~> 5.8.0)
-  sentry-ruby (~> 5.8.0)
+  sentry-rails (~> 5.10.0)
+  sentry-ruby (~> 5.10.0)
   spring
   spring-watcher-listen (~> 2.1.0)
   timecop
