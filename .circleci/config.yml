@@ -227,7 +227,6 @@ workflows:
             branches:
               only:
                 - main
-                - ecr-migration
       - deploy_to_test_eks:
           context: *context
           requires:
@@ -236,7 +235,7 @@ workflows:
           context: *context
           requires:
             - deploy_to_test_eks
-      # - deploy_to_live_eks:
-      #     context: *context
-      #     requires:
-      #       - editor_acceptance_tests_eks
+      - deploy_to_live_eks:
+          context: *context
+          requires:
+            - editor_acceptance_tests_eks
