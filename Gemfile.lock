@@ -190,7 +190,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.4)
-    minitest (5.19.0)
+    minitest (5.20.0)
     msgpack (1.7.1)
     multi_xml (0.6.0)
     net-imap (0.3.7)
@@ -518,10 +518,10 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sentry-rails (5.10.0)
+    sentry-rails (5.11.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.10.0)
-    sentry-ruby (5.10.0)
+      sentry-ruby (~> 5.11.0)
+    sentry-ruby (5.11.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     spring (4.1.1)
     spring-watcher-listen (2.1.0)
@@ -571,8 +571,8 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop (~> 1.55.0)
   rubocop-govuk
-  sentry-rails (~> 5.10.0)
-  sentry-ruby (~> 5.10.0)
+  sentry-rails (~> 5.11.0)
+  sentry-ruby (~> 5.11.0)
   spring
   spring-watcher-listen (~> 2.1.0)
   timecop
