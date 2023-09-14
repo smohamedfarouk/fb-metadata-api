@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ministryofjustice/fb-metadata-presenter.git
-  revision: f82ea9f841344606907f4a293a5075efbd28c638
+  revision: c7e5b107d957e235985a691fb6e8b030335848cd
   branch: conditional-content-fixture
   specs:
     metadata_presenter (3.2.10)
@@ -111,7 +111,7 @@ GEM
     globalid (1.1.0)
       activesupport (>= 5.0)
     google-protobuf (3.24.3)
-    googleapis-common-protos-types (1.8.0)
+    googleapis-common-protos-types (1.9.0)
       google-protobuf (~> 3.18)
     govspeak (7.1.1)
       actionview (>= 6)
@@ -123,7 +123,7 @@ GEM
       nokogiri (~> 1.12)
       rinku (~> 2.0)
       sanitize (~> 6)
-    govuk_app_config (9.1.0)
+    govuk_app_config (9.2.0)
       logstasher (~> 2.1)
       opentelemetry-exporter-otlp (>= 0.25, < 0.27)
       opentelemetry-instrumentation-all (>= 0.39.1, < 0.41.0)
@@ -140,10 +140,10 @@ GEM
       activemodel (>= 6.1)
       activesupport (>= 6.1)
       html-attributes-utils (~> 1)
-    govuk_personalisation (0.14.0)
+    govuk_personalisation (0.15.0)
       plek (>= 1.9.0)
       rails (>= 6, < 8)
-    govuk_publishing_components (35.15.3)
+    govuk_publishing_components (35.16.0)
       govuk_app_config
       govuk_personalisation (>= 0.7.0)
       kramdown
@@ -212,7 +212,7 @@ GEM
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    opentelemetry-api (1.2.2)
+    opentelemetry-api (1.2.3)
     opentelemetry-common (0.20.0)
       opentelemetry-api (~> 1.0)
     opentelemetry-exporter-otlp (0.26.1)
@@ -517,7 +517,7 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    sanitize (6.0.2)
+    sanitize (6.1.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     sassc (2.4.0)
@@ -546,7 +546,7 @@ GEM
       sprockets (>= 3.0.0)
     statsd-ruby (1.5.0)
     thor (1.2.2)
-    tilt (2.2.0)
+    tilt (2.3.0)
     timecop (0.9.8)
     timeout (0.4.0)
     tzinfo (2.0.6)
