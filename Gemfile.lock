@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ministryofjustice/fb-metadata-presenter.git
-  revision: c7e5b107d957e235985a691fb6e8b030335848cd
+  revision: 94c81663331fa53a05d36170243397f5d82c600f
   branch: conditional-content-fixture
   specs:
     metadata_presenter (3.2.10)
@@ -143,7 +143,7 @@ GEM
     govuk_personalisation (0.15.0)
       plek (>= 1.9.0)
       rails (>= 6, < 8)
-    govuk_publishing_components (35.16.0)
+    govuk_publishing_components (35.16.1)
       govuk_app_config
       govuk_personalisation (>= 0.7.0)
       kramdown
@@ -312,7 +312,7 @@ GEM
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.22.1)
       opentelemetry-instrumentation-rack (~> 0.21)
-    opentelemetry-instrumentation-graphql (0.26.6)
+    opentelemetry-instrumentation-graphql (0.26.7)
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.22.1)
     opentelemetry-instrumentation-gruf (0.1.0)
