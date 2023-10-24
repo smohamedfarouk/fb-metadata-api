@@ -224,11 +224,7 @@ GEM
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-active_support (~> 0.1)
       opentelemetry-instrumentation-base (~> 0.22.1)
-<<<<<<< HEAD
-    opentelemetry-instrumentation-active_job (0.6.0)
-=======
     opentelemetry-instrumentation-active_job (0.6.1)
->>>>>>> 241ee48 (Using last version of metadata presenter gem)
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.22.1)
     opentelemetry-instrumentation-active_model_serializers (0.20.1)
