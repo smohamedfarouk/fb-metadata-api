@@ -95,7 +95,7 @@ jobs:
             echo "export SSH_FILE_FOR_SECRETS=~/.ssh/id_rsa_d8c6c158ff1732a896f283a6e7e7e838" >> $BASH_ENV
       - run: &deploy_scripts
           name: cloning deploy scripts
-          command: 'git clone --branch temporary-ecr-creds git@github.com:ministryofjustice/fb-deploy.git deploy-scripts'
+          command: 'git clone git@github.com:ministryofjustice/fb-deploy.git deploy-scripts'
       - run:
           name: build and push docker images
           environment:
@@ -173,7 +173,7 @@ jobs:
       - run:
           name: Run editor acceptance tests (eks)
           command: |
-            EDITOR_APP=https://testable-metadata-presenter.apps.live.cloud-platform.service.justice.gov.uk
+            EDITOR_APP=https://fb-editor-test.apps.live.cloud-platform.service.justice.gov.uk
             echo 'export ACCEPTANCE_TESTS_EDITOR_APP=$EDITOR_APP' >> $BASH_ENV
             echo 'export ACCEPTANCE_TESTS_USER=$ACCEPTANCE_TESTS_USER' >> $BASH_ENV
             echo 'export ACCEPTANCE_TESTS_PASSWORD=$ACCEPTANCE_TESTS_PASSWORD' >> $BASH_ENV
