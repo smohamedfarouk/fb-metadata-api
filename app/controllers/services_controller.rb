@@ -42,6 +42,16 @@ class ServicesController < MetadataController
     render json: ServicesSerializer.new(services).attributes, status: :ok
   end
 
+  def destroy
+    service_id = params[:id]
+    if Service.where(id: service_id).empty?
+      head :bad_request
+    else
+      Service.find(service_id).destroy!
+      head :ok
+    end
+  end
+
   private
 
   def page
