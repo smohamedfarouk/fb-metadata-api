@@ -20,6 +20,11 @@ services:
       - 8080:3000
     environment:
       DATABASE_URL: "postgres://postgres:password@metadata-db/metadata_local"
+      FB_METADATA_DB_USERNAME: postgres
+      FB_METADATA_DB_PASSWORD: password
+      FB_METADATA_DB_HOST: metadata-db
+      FB_METADATA_DB_PORT: 5432
+      FB_METADATA_DB_DATABASE_NAME: metadata_local
       RAILS_ENV: test
       SERVICE_TOKEN_CACHE_ROOT_URL: 'http://metadata-app-service-token-cache-app:3000'
       MAX_IAT_SKEW_SECONDS: '60'
