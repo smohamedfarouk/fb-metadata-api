@@ -10,8 +10,6 @@ RUN addgroup -g ${UID} -S appgroup && \
 
 WORKDIR /app
 
-COPY fb-metadata-presenter ../fb-metadata-presenter
-
 RUN chown appuser:appgroup /app
 
 ADD --chown=appuser:appgroup https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem ./rds-ca-2019-root.pem
