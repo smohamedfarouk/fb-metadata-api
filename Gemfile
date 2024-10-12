@@ -8,6 +8,7 @@ ruby '3.1.3'
 gem 'metadata_presenter',
     github: 'smohamedfarouk/fb-metadata-presenter',
     branch: 'add-dropdown-button'
+# # gem 'metadata_presenter', path: '/Users/app/Desktop/projects/uk-project-1/fb-metadata-presenter'   
 # gem 'metadata_presenter', path: '../fb-metadata-presenter'
 # gem 'metadata_presenter', '3.4.5'
 # gem 'metadata_presenter', git: 'https://github.com/cabinetoffice/fb-metadata-presenter.git', branch: 'fs-branch'
