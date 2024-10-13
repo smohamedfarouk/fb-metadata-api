@@ -5,11 +5,16 @@ ruby '3.1.3'
 
 # Metadata presenter - if you need to be on development you can uncomment
 # one of these lines:
-# gem 'metadata_presenter',
-#     github: 'ministryofjustice/fb-metadata-presenter',
-#     branch: 'bump-json-schema'
+gem 'metadata_presenter',
+    github: 'smohamedfarouk/fb-metadata-presenter',
+    branch: 'add-dropdown-button'
+# # gem 'metadata_presenter', path: '/Users/app/Desktop/projects/uk-project-1/fb-metadata-presenter'   
 # gem 'metadata_presenter', path: '../fb-metadata-presenter'
-gem 'metadata_presenter', '3.3.5'
+# gem 'metadata_presenter', '3.4.5'
+# gem 'metadata_presenter', git: 'https://github.com/cabinetoffice/fb-metadata-presenter.git', branch: 'fs-branch'
+gem 'google-protobuf', '~> 3.14'
+
+
 
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'fb-jwt-auth', '~> 0.10.0'
